@@ -17,8 +17,13 @@ class _KnockKnockState extends State<KnockKnock> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+<<<<<<< Updated upstream
       home: Login(),
         // home: SeniorInitial()
+=======
+      // home: Login(),
+        home: SeniorInitial()
+>>>>>>> Stashed changes
         // home: ManagerInitial(),
         );
   }

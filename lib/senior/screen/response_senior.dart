@@ -35,6 +35,7 @@ class _ResponsePage extends State<ResponsePage> {
   @override
   Widget build(BuildContext context) {
     if (!isKnocked) {
+<<<<<<< Updated upstream
       return DefaultTabController(
           length: 3,
           initialIndex: 0,
@@ -49,6 +50,11 @@ class _ResponsePage extends State<ResponsePage> {
                     onTabTapped: _onNavTapped,
                   ),
           ));
+=======
+      return  Scaffold(
+            body: _navIndex[_selectedIndex]
+          );
+>>>>>>> Stashed changes
     } else {
       return Scaffold(
         appBar: const MyAppBar(
@@ -56,7 +62,11 @@ class _ResponsePage extends State<ResponsePage> {
         ),
         body: Container(
           clipBehavior: Clip.antiAlias,
+<<<<<<< Updated upstream
           decoration: BoxDecoration(color: Color(0xFFEDEDF4)),
+=======
+          decoration: const BoxDecoration(color: Color(0xFFEDEDF4)),
+>>>>>>> Stashed changes
           //배경
           child: Stack(
             children: [
@@ -65,7 +75,11 @@ class _ResponsePage extends State<ResponsePage> {
                 left: 0,
                 right: 0,
                 top: 50,
+<<<<<<< Updated upstream
                 child: Container(
+=======
+                child: SizedBox(
+>>>>>>> Stashed changes
                   width: 354,
                   height: 250,
                   child: Stack(
@@ -79,7 +93,11 @@ class _ResponsePage extends State<ResponsePage> {
                           height: 140,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
+<<<<<<< Updated upstream
                               image: AssetImage('assets/basic_profile.png'),
+=======
+                              image: AssetImage('assets/images/basic_profile.png'),
+>>>>>>> Stashed changes
                             ),
                           ),
                         ),
@@ -92,7 +110,11 @@ class _ResponsePage extends State<ResponsePage> {
                           child: Text(
                             managerName + ' 사회복지사',
                             textAlign: TextAlign.center,
+<<<<<<< Updated upstream
                             style: TextStyle(
+=======
+                            style: const TextStyle(
+>>>>>>> Stashed changes
                               color: Color(0xFF1E1E1E),
                               fontSize: 30,
                               fontFamily: 'Inter',
@@ -142,7 +164,11 @@ class _ResponsePage extends State<ResponsePage> {
                   width: 325,
                   height: 200,
                   child: Text(
+<<<<<<< Updated upstream
                     '마지막 대답 날짜:\n${lastResponseTime}20XX.XX.XX (4일 전)',
+=======
+                    '마지막 대답 날짜:\n${lastResponseTime}',
+>>>>>>> Stashed changes
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.8),

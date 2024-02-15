@@ -38,6 +38,10 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
         initialIndex: _selectedIndex,
         child: Scaffold(
           backgroundColor: MyColor.myBackground,
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
           appBar: _selectedIndex == 1
               ? null
               : MyAppBar(
@@ -45,7 +49,11 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                   leadingCallback: goHome,
                   myLeadingWidth: 130,
                 ),
+<<<<<<< Updated upstream
           bottomNavigationBar: _selectedIndex == 1
+=======
+          bottomNavigationBar: _selectedIndex != 2
+>>>>>>> Stashed changes
               ? null
               : MyCustomBottomNavigationBar(
                   onTabTapped: _onNavTapped,
@@ -219,7 +227,11 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
+<<<<<<< Updated upstream
                               fontSize: 24,
+=======
+                              fontSize: 20,
+>>>>>>> Stashed changes
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
                               height: 0,

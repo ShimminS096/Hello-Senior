@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
+<<<<<<< Updated upstream
 import 'package:knockknock/senior/screen/emergency_2_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
+=======
+import 'package:knockknock/senior/component/my_appbar.dart';
+import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
+import 'package:knockknock/senior/screen/emergency_2_senior.dart';
+import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/screen/record_senior.dart';
+import 'package:knockknock/senior/senior.inital.dart';
+>>>>>>> Stashed changes
 
 String managerName = '김 아무개';
 String seniorAddress = '서울특별시 마포구 와우산로 94';
@@ -17,7 +26,14 @@ class EmergencyPage extends StatefulWidget {
 
 class _EmergencyPage extends State<EmergencyPage> {
   int _selectedIndex = 2;
+<<<<<<< Updated upstream
 
+=======
+  void goHome() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
+  }
+>>>>>>> Stashed changes
   final List<Widget> _navIndex = [
     const RecordPage(),
     const HomePage(),
@@ -34,10 +50,25 @@ class _EmergencyPage extends State<EmergencyPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3, // 하단 네비게이션 바의 아이템 개수
+<<<<<<< Updated upstream
       initialIndex: _selectedIndex,
       child: Scaffold(
         backgroundColor: MyColor.myBackground,
         body: Container(
+=======
+      initialIndex: 2,
+      child: Scaffold(
+  backgroundColor: _selectedIndex == 2
+      ? const Color(0xffeeccca) : MyColor.myBackground,
+        appBar: _selectedIndex !=2 ? null :  MyAppBar(
+          leadingText: '홈으로',
+          leadingCallback: goHome,
+          myLeadingWidth: 130,
+        ),
+        bottomNavigationBar: _selectedIndex != 2 ? null : MyCustomBottomNavigationBar(
+            onTabTapped: _onNavTapped),
+        body: _selectedIndex !=2 ?  SeniorInitial(i: _selectedIndex,) : Container(
+>>>>>>> Stashed changes
           clipBehavior: Clip.antiAlias,
           decoration: const BoxDecoration(color: MyColor.myBackground),
           child: Stack(

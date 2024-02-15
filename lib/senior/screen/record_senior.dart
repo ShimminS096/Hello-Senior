@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:knockknock/senior/component/my_appbar.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
 
+=======
+import 'package:knockknock/components/color.dart';
+import 'package:knockknock/senior/component/my_appbar.dart';
+import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
+import 'package:knockknock/senior/screen/emergency_senior.dart';
+import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/senior.inital.dart';
+
+class RecordPage extends StatefulWidget {
+  const RecordPage({Key? key}) : super(key: key);
+>>>>>>> Stashed changes
   @override
   State<StatefulWidget> createState() => _RecordPage();
 }
 
 class _RecordPage extends State<RecordPage> {
+<<<<<<< Updated upstream
   void onLogout() {}
   @override
   Widget build(BuildContext context) {
@@ -17,6 +30,49 @@ class _RecordPage extends State<RecordPage> {
         myLeadingWidth: 130,
       ),
       body: ChatScreen(),
+=======
+  int _selectedIndex = 0;
+  void goHome() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
+  }
+  void _onNavTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  final List<Widget> _navIndex = [
+    const RecordPage(),
+    const HomePage(),
+    const EmergencyPage(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3, // 하단 네비게이션 바의 아이템 개수
+      initialIndex: _selectedIndex, // 초기 선택된 인덱스
+      child: Scaffold(
+        backgroundColor: _selectedIndex == 2
+            ? MyColor.myBackground
+            : const Color(0xffEDEDF4),
+        appBar: _selectedIndex != 0
+            ? null
+            :  MyAppBar(
+                myLeadingWidth: 130,
+          leadingText: '홈으로',
+          leadingCallback: goHome,
+              ),
+        bottomNavigationBar: _selectedIndex != 0
+            ? null
+            : MyCustomBottomNavigationBar(onTabTapped: _onNavTapped),
+        body: _selectedIndex != 0
+            ? SeniorInitial(
+                i: _selectedIndex,
+              )
+            : const ChatScreen(),
+      ),
+>>>>>>> Stashed changes
     );
   }
 }
