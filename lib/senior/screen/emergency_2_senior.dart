@@ -38,10 +38,6 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
         initialIndex: _selectedIndex,
         child: Scaffold(
           backgroundColor: MyColor.myBackground,
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
           appBar: _selectedIndex == 1
               ? null
               : MyAppBar(
@@ -49,11 +45,7 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                   leadingCallback: goHome,
                   myLeadingWidth: 130,
                 ),
-<<<<<<< Updated upstream
-          bottomNavigationBar: _selectedIndex == 1
-=======
           bottomNavigationBar: _selectedIndex != 2
->>>>>>> Stashed changes
               ? null
               : MyCustomBottomNavigationBar(
                   onTabTapped: _onNavTapped,
@@ -164,7 +156,8 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                     Text(
                                       '서울특별시 마포구 와우산로 94',
                                       style: TextStyle(
-                                          fontSize: 13, fontWeight: FontWeight.w400),
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -213,9 +206,11 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                           onPressed: () {},
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                                color: const Color(0xFFF24822).withOpacity(0.5)),
+                                color:
+                                    const Color(0xFFF24822).withOpacity(0.5)),
                             fixedSize: const Size(333, 70),
-                            backgroundColor: const Color(0xFFF24822).withOpacity(0.5),
+                            backgroundColor:
+                                const Color(0xFFF24822).withOpacity(0.5),
                             foregroundColor: Colors.white,
                             shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -227,11 +222,7 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
-<<<<<<< Updated upstream
-                              fontSize: 24,
-=======
                               fontSize: 20,
->>>>>>> Stashed changes
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
                               height: 0,

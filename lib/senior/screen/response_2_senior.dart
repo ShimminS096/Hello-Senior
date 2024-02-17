@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
-<<<<<<< Updated upstream
-import 'package:knockknock/senior/screen/record_senior.dart';
-
-class ResponseCompletePage extends StatelessWidget {
-  const ResponseCompletePage({super.key});
-=======
-import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
-import 'package:knockknock/senior/screen/record_senior.dart';
+
 import 'package:knockknock/senior/senior.inital.dart';
 
 class ResponseCompletePage extends StatefulWidget {
@@ -24,34 +17,14 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
-  final List<Widget> _navIndex = [
-    const RecordPage(),
-    const HomePage(),
-    const EmergencyPage(),
-  ];
-  int _selectedIndex = 0;
-  void _onNavTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
->>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: MyCustomBottomNavigationBar(
-      //   onTabTapped: _onNavTapped,
-      // ),
-<<<<<<< Updated upstream
-      appBar: const MyAppBar(
-        myLeadingWidth: 130,
-=======
       appBar: MyAppBar(
         myLeadingWidth: 130,
         leadingText: '홈으로',
         leadingCallback: goHome,
->>>>>>> Stashed changes
       ),
       body: Container(
         clipBehavior: Clip.antiAlias,
@@ -77,34 +50,21 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                         height: 140,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-<<<<<<< Updated upstream
-                            image: AssetImage('assets/basic_profile.png'),
-=======
-                            image: AssetImage('assets/images/basic_profile.png'),
->>>>>>> Stashed changes
+                            image:
+                                AssetImage('assets/images/basic_profile.png'),
                           ),
                         ),
                       ),
                     ),
-<<<<<<< Updated upstream
-                    const Positioned(
-=======
-                     Positioned(
->>>>>>> Stashed changes
+                    Positioned(
                       left: 0,
                       right: 0,
                       top: 170,
                       child: SizedBox(
                         child: Text(
-<<<<<<< Updated upstream
-                          'managerName' + ' 사회복지사',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-=======
-                           managerName + ' 사회복지사',
+                          managerName + ' 사회복지사',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
->>>>>>> Stashed changes
                             color: Color(0xFF1E1E1E),
                             fontSize: 30,
                             fontFamily: 'Inter',
@@ -188,17 +148,10 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
               top: 500,
               child: OutlinedButton(
                 onPressed: () {
-<<<<<<< Updated upstream
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RecordPage()));
-                },
-                child: Text(
-=======
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                           SeniorInitial(i: 0)));
+                          builder: (context) => SeniorInitial(i: 0)));
                 },
                 style: OutlinedButton.styleFrom(
                   fixedSize: const Size(333, 83),
@@ -208,7 +161,6 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                       borderRadius: BorderRadius.all(Radius.circular(60))),
                 ),
                 child: const Text(
->>>>>>> Stashed changes
                   '기록 화면 가기',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -219,16 +171,6 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                     height: 0,
                   ),
                 ),
-<<<<<<< Updated upstream
-                style: OutlinedButton.styleFrom(
-                  fixedSize: const Size(333, 83),
-                  backgroundColor: const Color(0xFF3475EB),
-                  foregroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(60))),
-                ),
-=======
->>>>>>> Stashed changes
               ),
             ),
           ],
@@ -236,8 +178,4 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
       ),
     );
   }
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>967955689130-afup0f85tk3ai8c7fq5aku5n0fcv8qod.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.967955689130-afup0f85tk3ai8c7fq5aku5n0fcv8qod</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAJ4lfL2XEIGz2zXQCBcg0PGsppQIrdAaA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>967955689130</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.knockknock.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>hellosenior-da88b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hellosenior-da88b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:967955689130:ios:4f2f245a06db66c5dbaad3</string>
+</dict>
+</plist>

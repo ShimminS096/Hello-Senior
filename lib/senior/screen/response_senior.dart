@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
-import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
@@ -35,26 +34,7 @@ class _ResponsePage extends State<ResponsePage> {
   @override
   Widget build(BuildContext context) {
     if (!isKnocked) {
-<<<<<<< Updated upstream
-      return DefaultTabController(
-          length: 3,
-          initialIndex: 0,
-          child: Scaffold(
-            backgroundColor: _selectedIndex == 2
-                ? const Color(0xffeeccca)
-                : const Color(0xffEDEDF4),
-            body: _navIndex[_selectedIndex],
-            bottomNavigationBar: _selectedIndex == 1
-                ? null
-                : MyCustomBottomNavigationBar(
-                    onTabTapped: _onNavTapped,
-                  ),
-          ));
-=======
-      return  Scaffold(
-            body: _navIndex[_selectedIndex]
-          );
->>>>>>> Stashed changes
+      return Scaffold(body: _navIndex[_selectedIndex]);
     } else {
       return Scaffold(
         appBar: const MyAppBar(
@@ -62,11 +42,7 @@ class _ResponsePage extends State<ResponsePage> {
         ),
         body: Container(
           clipBehavior: Clip.antiAlias,
-<<<<<<< Updated upstream
-          decoration: BoxDecoration(color: Color(0xFFEDEDF4)),
-=======
           decoration: const BoxDecoration(color: Color(0xFFEDEDF4)),
->>>>>>> Stashed changes
           //배경
           child: Stack(
             children: [
@@ -75,11 +51,7 @@ class _ResponsePage extends State<ResponsePage> {
                 left: 0,
                 right: 0,
                 top: 50,
-<<<<<<< Updated upstream
-                child: Container(
-=======
                 child: SizedBox(
->>>>>>> Stashed changes
                   width: 354,
                   height: 250,
                   child: Stack(
@@ -93,11 +65,8 @@ class _ResponsePage extends State<ResponsePage> {
                           height: 140,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-<<<<<<< Updated upstream
-                              image: AssetImage('assets/basic_profile.png'),
-=======
-                              image: AssetImage('assets/images/basic_profile.png'),
->>>>>>> Stashed changes
+                              image:
+                                  AssetImage('assets/images/basic_profile.png'),
                             ),
                           ),
                         ),
@@ -110,11 +79,7 @@ class _ResponsePage extends State<ResponsePage> {
                           child: Text(
                             managerName + ' 사회복지사',
                             textAlign: TextAlign.center,
-<<<<<<< Updated upstream
-                            style: TextStyle(
-=======
                             style: const TextStyle(
->>>>>>> Stashed changes
                               color: Color(0xFF1E1E1E),
                               fontSize: 30,
                               fontFamily: 'Inter',
@@ -141,15 +106,15 @@ class _ResponsePage extends State<ResponsePage> {
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(
-                            color: const Color.fromARGB(255, 206, 206, 206),
+                        side: const BorderSide(
+                            color: Color.fromARGB(255, 206, 206, 206),
                             width: 3),
                       ),
                     ),
                     child: Center(
                       child: Text(
-                        knockTime + '\n홍길동 님\n잘 계시나요?',
-                        style: TextStyle(
+                        '$knockTime\n홍길동 님\n잘 계시나요?',
+                        style: const TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w400),
                         textAlign: TextAlign.center,
                       ),
@@ -164,11 +129,7 @@ class _ResponsePage extends State<ResponsePage> {
                   width: 325,
                   height: 200,
                   child: Text(
-<<<<<<< Updated upstream
-                    '마지막 대답 날짜:\n${lastResponseTime}20XX.XX.XX (4일 전)',
-=======
                     '마지막 대답 날짜:\n${lastResponseTime}',
->>>>>>> Stashed changes
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.8),
@@ -194,6 +155,13 @@ class _ResponsePage extends State<ResponsePage> {
                             builder: (context) =>
                                 const ResponseCompletePage()));
                   },
+                  style: OutlinedButton.styleFrom(
+                    fixedSize: const Size(333, 83),
+                    backgroundColor: const Color(0xFF3475EB),
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(60))),
+                  ),
                   child: const Text(
                     '대답하기',
                     textAlign: TextAlign.center,
@@ -204,13 +172,6 @@ class _ResponsePage extends State<ResponsePage> {
                       fontWeight: FontWeight.w400,
                       height: 0,
                     ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    fixedSize: Size(333, 83),
-                    backgroundColor: Color(0xFF3475EB),
-                    foregroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(60))),
                   ),
                 ),
               ),

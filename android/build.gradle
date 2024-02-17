@@ -1,9 +1,5 @@
 buildscript {
-<<<<<<< Updated upstream
-    ext.kotlin_version = '1.7.10'
-=======
     ext.kotlin_version = '1.9.22'
->>>>>>> Stashed changes
     repositories {
         google()
         mavenCentral()
