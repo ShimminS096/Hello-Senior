@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/nav2_todo/m_todo_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ToDoBox extends StatefulWidget {
   final String name;
+  final String seniorUID;
 
-  const ToDoBox({Key? key, required this.name}) : super(key: key);
+  const ToDoBox({Key? key, required this.name, required this.seniorUID})
+      : super(key: key);
 
   @override
   State<ToDoBox> createState() => _ToDoBoxState();
@@ -21,12 +24,34 @@ class _ToDoBoxState extends State<ToDoBox> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _getTodos();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _getTodos() async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('todo_list')
+          .doc('B0z8CS40r7dtESumdeohkL0Rqyk2') //현재 user의 UID로 변경
+          .collection(widget.seniorUID) // seniorUID에 대한 할 일 목록 가져오기
+          .doc('todos')
+          .get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        final todos = List<String>.from(data['todo']);
+        setState(() {
+          todoList = todos;
+        });
+      }
+    } catch (e) {
+      print("Error getting todos: $e");
+    }
   }
 
   void toggleTodoInput() {
@@ -47,10 +72,27 @@ class _ToDoBoxState extends State<ToDoBox> {
   void addTodo() {
     String todo = todoController.text;
     if (todo.isNotEmpty) {
-      setState(() {
-        todoList.add(todo);
-        todoController.clear();
-      });
+      try {
+        final currentUserUID =
+            'B0z8CS40r7dtESumdeohkL0Rqyk2'; // 현재 사용자의 UID로 변경해야함
+        final seniorUID = widget.seniorUID;
+
+        FirebaseFirestore.instance
+            .collection('todo_list')
+            .doc(currentUserUID)
+            .collection(seniorUID)
+            .doc('todos')
+            .update({
+          'todo': FieldValue.arrayUnion([todo]),
+        });
+
+        setState(() {
+          todoList.add(todo);
+          todoController.clear();
+        });
+      } catch (e) {
+        print("Error adding todo: $e");
+      }
     }
     toggleTodoInput();
   }
@@ -135,6 +177,7 @@ class _ToDoBoxState extends State<ToDoBox> {
                     todoList.length,
                     (index) => TodoItem(
                       text: todoList[index],
+                      seniorUID: widget.seniorUID,
                       onEdit: (editedTodo) {
                         editTodo(index, editedTodo);
                       },
