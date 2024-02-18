@@ -6,9 +6,10 @@ import 'package:knockknock/manager/nav2_todo/m_todo_initial.dart';
 import 'package:knockknock/manager/nav3_home/m_home_initial.dart';
 import 'package:knockknock/manager/nav4_location/m_location_initial.dart';
 import 'package:knockknock/manager/nav5_menu/m_menu_initial.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManagerInitial extends StatefulWidget {
-  const ManagerInitial({super.key});
+  const ManagerInitial({Key? key}) : super(key: key);
 
   @override
   State<ManagerInitial> createState() => _ManagerInitialState();
@@ -16,7 +17,30 @@ class ManagerInitial extends StatefulWidget {
 
 class _ManagerInitialState extends State<ManagerInitial> {
   int _selectedIndex = 2;
-  int numberofSeniors = 10;
+  late int _numberofSeniors;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNumberofSeniors();
+  }
+
+  Future<void> _initializeNumberofSeniors() async {
+    _numberofSeniors = await _getNumberOfSeniors();
+  }
+
+  Future<int> _getNumberOfSeniors() async {
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc('B0z8CS40r7dtESumdeohkL0Rqyk2') // currentUser의 UID로 변경해야 함
+        .get();
+    final seniorUIDs = docSnapshot['seniorUIDs'] as List<dynamic>;
+    setState(() {
+      _numberofSeniors = seniorUIDs.length;
+    });
+
+    return seniorUIDs.length;
+  }
 
   void _onNavTapped(int index) {
     setState(() {
@@ -41,17 +65,20 @@ class _ManagerInitialState extends State<ManagerInitial> {
   Widget _buildSelectedScreen() {
     switch (_selectedIndex) {
       case 0:
-        return ManagerMessageInitial(numberofSeniors: numberofSeniors);
+        return ManagerMessageInitial(numberofSeniors: _numberofSeniors);
       case 1:
-        return ManagerTodoInitial(numberofSeniors: numberofSeniors);
+        return ManagerTodoInitial(
+          numberofSeniors: _numberofSeniors,
+          currentUserUID: 'B0z8CS40r7dtESumdeohkL0Rqyk2', //현재 user의 UID로 변경해야함
+        );
       case 2:
-        return ManagerHomeInitial(numberofSeniors: numberofSeniors);
+        return ManagerHomeInitial(numberofSeniors: _numberofSeniors);
       case 3:
-        return ManagerLocationInitial(numberofSeniors: numberofSeniors);
+        return ManagerLocationInitial(numberofSeniors: _numberofSeniors);
       case 4:
         return const ManagerMenuInitial();
       default:
-        return ManagerHomeInitial(numberofSeniors: numberofSeniors);
+        return ManagerHomeInitial(numberofSeniors: _numberofSeniors);
     }
   }
 }
