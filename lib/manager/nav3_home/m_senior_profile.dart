@@ -8,10 +8,10 @@ class SeniorProfile extends StatefulWidget {
   final int index;
 
   const SeniorProfile({
-    Key? key,
+    super.key,
     required this.seniorInfo,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<SeniorProfile> createState() =>
@@ -32,28 +32,43 @@ class _SeniorProfileState extends State<SeniorProfile> {
   String _guardianPhoneNumber = '';
   String _speciality = '';
 
-  late TextEditingController _addressController;
-  late TextEditingController _guardianController;
-  late TextEditingController _specialityController;
+  //초기화하지 않은 상태
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _guardianController = TextEditingController();
+  final TextEditingController _specialityController = TextEditingController();
   bool isSeniorEditing = false;
 
   @override
   void initState() {
     super.initState();
-    _addressController = TextEditingController(text: _address);
-    _guardianController = TextEditingController(text: _guardianPhoneNumber);
-    _specialityController = TextEditingController(text: _speciality);
+  }
+
+  // 컨트롤러의 값을 변수에 할당하는 함수
+  void updateControllers() {
+    if (mounted) {
+      setState(() {
+        _address = _addressController.text;
+        _guardianPhoneNumber = _guardianController.text;
+        _speciality = _specialityController.text;
+      });
+    }
   }
 
   void onEditSeniorProfile() async {
-    setState(() {
-      isSeniorEditing = !isSeniorEditing;
-    });
+    //버튼을 눌렀을 때, 현재 상태 변경
+    if (mounted) {
+      setState(() {
+        isSeniorEditing = !isSeniorEditing;
+      });
+    }
+    //변경된 값 전달하기
+    updateControllers();
     if (!isSeniorEditing) {
       await updateFirestoreData();
     }
   }
 
+  //firestore에 변경된 필드값 보내기
   Future<void> updateFirestoreData() async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final String uid = seniorInfo['seniorUID'];
@@ -65,6 +80,7 @@ class _SeniorProfileState extends State<SeniorProfile> {
     });
   }
 
+  //firestore에서 현재 유저의 문서 가져오기
   void fetchSeniorInfo() async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final String uid = widget.seniorInfo['seniorUID'];
@@ -73,18 +89,22 @@ class _SeniorProfileState extends State<SeniorProfile> {
         await _firestore.collection('users').doc(uid).get();
 
     if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.data()!;
-      setState(() {
-        _address = data['address'] ?? '';
-        _guardianPhoneNumber = data['protectorPhoneNumber'] ?? '';
-        _speciality = data['detail'] ?? '';
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      if (mounted) {
+        setState(() {
+          //변수에 필드값 할당하기
+          _address = data['address'] ?? '';
+          _guardianPhoneNumber = data['protectorPhoneNumber'] ?? '';
+          _speciality = data['detail'] ?? '';
 
-        if (isSeniorEditing) {
-          _addressController.text = _address;
-          _guardianController.text = _guardianPhoneNumber;
-          _specialityController.text = _speciality;
-        }
-      });
+          //편집 모드가 아니라면(편집 모드 사용 전이라면), 가져온 필드값을 Controller에 넣어주기
+          if (!isSeniorEditing) {
+            _addressController.text = _address;
+            _guardianController.text = _guardianPhoneNumber;
+            _specialityController.text = _speciality;
+          }
+        });
+      }
     }
   }
 
@@ -140,8 +160,8 @@ class _SeniorProfileState extends State<SeniorProfile> {
                     const SizedBox(height: 10),
                     Text(
                       seniorInfo['seniorName'],
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -160,11 +180,11 @@ class _SeniorProfileState extends State<SeniorProfile> {
                       width: 450,
                       height: 60,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 200,
                               child: Text(
                                 "전화번호",
@@ -174,7 +194,7 @@ class _SeniorProfileState extends State<SeniorProfile> {
                             ),
                             Text(
                               seniorInfo['phoneNumber'],
-                              style: TextStyle(fontSize: 22),
+                              style: const TextStyle(fontSize: 22),
                             ),
                           ],
                         ),
@@ -212,7 +232,8 @@ class _SeniorProfileState extends State<SeniorProfile> {
                             ),
                             Expanded(
                               child: TextField(
-                                //controller: _addressController,
+                                controller:
+                                    isSeniorEditing ? _addressController : null,
                                 style: const TextStyle(
                                   fontSize: 22,
                                   color: MyColor.myBlack,
@@ -270,7 +291,9 @@ class _SeniorProfileState extends State<SeniorProfile> {
                             ),
                             Expanded(
                               child: TextField(
-                                  controller: _guardianController,
+                                  controller: isSeniorEditing
+                                      ? _guardianController
+                                      : null,
                                   style: const TextStyle(
                                     fontSize: 22,
                                     color: MyColor.myBlack,
@@ -338,7 +361,8 @@ class _SeniorProfileState extends State<SeniorProfile> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 16),
                         child: TextField(
-                            controller: _specialityController,
+                            controller:
+                                isSeniorEditing ? _specialityController : null,
                             style: const TextStyle(
                               fontSize: 22,
                               color: MyColor.myBlack,
