@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
 import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/screen/response_senior.dart';
 import 'package:knockknock/senior/senior.inital.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _RecordPage();
 }
@@ -60,11 +64,69 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  var message_info = ['test', DateTime.utc(1944, 6, 6).toString()];
-  List<dynamic> messages() {
-    var messages = [];
-    messages.add(message_info);
-    return messages;
+  String senioruid =
+      "Y3wkpcrAscFryYYo4UOn"; // [하드코딩] currentUser 함수 사용 가능하면, 사용할 예정
+  String manageruid = "";
+  List<dynamic> messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecordMessages();
+  }
+
+  Future<void> fetchRecordMessages() async {
+    /*
+    ["users" 컬렉션 > '현재 돌봄 대상자 문서] 가져오기
+    */
+    DocumentSnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(senioruid)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    Map<String, dynamic> data =
+        seniorInfoSnapshot.data() as Map<String, dynamic>;
+
+    manageruid = data['managerUID'];
+    String seniorName = data['seniorName'];
+
+    /*
+    [message" 컬렉션 > 현재 관리자 문서 > "senior" 컬렉션 > '현재 돌봄 대상자 문서 > "checked" 컬렉션의 id] 가져오기
+    */
+    QuerySnapshot checkedSnapshot = await FirebaseFirestore.instance
+        .collection('message')
+        .doc(manageruid)
+        .collection('senior')
+        .doc(senioruid)
+        .collection('checked')
+        .orderBy('date', descending: false)
+        .get();
+
+    /* 
+    컬렉션 id를 통해, "checked" 컬렉션 내의 모든 문서를 checkedData 리스트에 추가하기
+    */
+    List<Map<String, dynamic>> checkedData = checkedSnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+
+    //개별 문서에 담겨있는 seniorname, seniorid, 메세지를 가져오기
+    for (var data in checkedData) {
+      if (data['writer_uid'] == manageruid) {
+        //작성자가 '나'인 경우
+        messages.add([
+          data['context'],
+          DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(data['date'].toDate())
+        ]);
+      }
+    }
+
+    setState(() {
+      this.messages = messages;
+      this.manageruid = manageruid;
+    });
   }
 
   Widget _buildMessageWidget(List<dynamic> messages, int index) {
@@ -116,9 +178,9 @@ class ChatScreenState extends State<ChatScreen> {
         children: [
           Flexible(
             child: ListView.builder(
-              itemCount: messages().length,
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                return _buildMessageWidget(messages(), index);
+                return _buildMessageWidget(messages, index);
               },
             ),
           ),

@@ -2,29 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
 import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:intl/intl.dart';
+import 'package:knockknock/senior/screen/record_senior.dart';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:knockknock/senior/senior.inital.dart';
+class ResponseCompletePage extends StatelessWidget {
+  final String manageruid;
+  final String senioruid;
+  final String managerName;
+  final String managerOccupation;
 
-class ResponseCompletePage extends StatefulWidget {
-  const ResponseCompletePage({Key? key}) : super(key: key);
+  ResponseCompletePage({
+    Key? key,
+    required this.manageruid,
+    required this.managerName,
+    required this.managerOccupation,
+    required this.senioruid,
+  }) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _ResponseCompletePage();
-}
+  Timestamp nowTime = Timestamp.now(); // 대답 메세지 보내는 시각
 
-class _ResponseCompletePage extends State<ResponseCompletePage> {
-  void goHome() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
+  void sentAnsweredMsg() async {
+    await FirebaseFirestore.instance
+        .collection('message')
+        .doc(manageruid)
+        .collection('senior')
+        .doc(senioruid)
+        .collection('checked')
+        .add({
+      'context': "대답하셨습니다.",
+      'date': nowTime,
+      'writer_uid': senioruid,
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    sentAnsweredMsg();
     return Scaffold(
-      appBar: MyAppBar(
+      // bottomNavigationBar: MyCustomBottomNavigationBar(
+      //   onTabTapped: _onNavTapped,
+      // ),
+      appBar: const MyAppBar(
         myLeadingWidth: 130,
-        leadingText: '홈으로',
-        leadingCallback: goHome,
       ),
       body: Container(
         clipBehavior: Clip.antiAlias,
@@ -50,8 +71,7 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                         height: 140,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/basic_profile.png'),
+                            image: AssetImage('assets/basic_profile.png'),
                           ),
                         ),
                       ),
@@ -62,9 +82,9 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                       top: 170,
                       child: SizedBox(
                         child: Text(
-                          managerName + ' 사회복지사',
+                          managerName + ' ' + managerOccupation,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Color(0xFF1E1E1E),
                             fontSize: 30,
                             fontFamily: 'Inter',
@@ -128,7 +148,9 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                 width: 325,
                 height: 200,
                 child: Text(
-                  '마지막 대답 날짜: \n지금',
+                  '마지막 대답 날짜: \n' +
+                      DateFormat('yyyy년 MM월 dd일 HH시 mm분')
+                          .format(nowTime.toDate()),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.8),
@@ -151,16 +173,10 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SeniorInitial(i: 0)));
+                        builder: (context) => RecordPage(),
+                      ));
                 },
-                style: OutlinedButton.styleFrom(
-                  fixedSize: const Size(333, 83),
-                  backgroundColor: const Color(0xFF3475EB),
-                  foregroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(60))),
-                ),
-                child: const Text(
+                child: Text(
                   '기록 화면 가기',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -170,6 +186,13 @@ class _ResponseCompletePage extends State<ResponseCompletePage> {
                     fontWeight: FontWeight.w400,
                     height: 0,
                   ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  fixedSize: const Size(333, 83),
+                  backgroundColor: const Color(0xFF3475EB),
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(60))),
                 ),
               ),
             ),

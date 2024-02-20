@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/login_signup/i_input_form.dart';
@@ -35,10 +36,38 @@ class _SeniorMatchingState extends State<SeniorMatching> {
         }),
       );
     } else {
-      // 연결 처리 로직 추가
-      setState(() {
-        isConnecting = true; // 연결 완료되면 true로 변경
+      // 입력받은 관리자 정보가 존재하는지 확인하기
+      Future<String> checkedUserExistence = checkUserExistence(context);
+
+      checkedUserExistence.then((value) {
+        if (value == "ManagerInfo_Error") {
+          setState(() {
+            isConnecting = false;
+          }); // 연결 완료되면 true로 변경
+        } else {
+          setState(() {
+            isConnecting = true;
+          }); // 연결에 실패한 경우
+        }
       });
+    }
+  }
+
+  Future<String> checkUserExistence(BuildContext context) async {
+    //users 컬렉션에서 입력받은 값과 일치하는 문서가 있는지 탐색하기
+    QuerySnapshot checkingMangerInfo = await FirebaseFirestore.instance
+        .collection('users')
+        .where('managerName', isEqualTo: _managernameController.text)
+        .where('phoneNumber', isEqualTo: _managerPhoneController.text)
+        .limit(1)
+        .get();
+
+    if (checkingMangerInfo.docs.isEmpty) {
+      //입력받은 정보와 일치하는 관리자 문서가 없는 경우
+      return "ManagerInfo_Error";
+    } else {
+      checkedExistUserDocInfo = checkingMangerInfo.docs.first.id;
+      return "Matching_Success";
     }
   }
 
@@ -47,13 +76,15 @@ class _SeniorMatchingState extends State<SeniorMatching> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SeniorSignUp(),
+          builder: (context) =>
+              SeniorSignUp(managerUID: checkedExistUserDocInfo),
         ),
       );
     }
   }
 
   bool isConnecting = false;
+  String checkedExistUserDocInfo = "";
 
   final TextEditingController _managernameController = TextEditingController();
   final TextEditingController _managerPhoneController = TextEditingController();

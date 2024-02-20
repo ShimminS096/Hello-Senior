@@ -3,6 +3,7 @@ import 'package:knockknock/components/color.dart';
 import 'package:knockknock/login_signup/i_login.dart';
 import 'package:knockknock/login_signup/i_signup_manager.dart';
 import 'package:knockknock/login_signup/i_signup_senior_matching.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpChoose extends StatelessWidget {
   const SignUpChoose({super.key});

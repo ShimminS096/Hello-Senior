@@ -1,78 +1,163 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
-
 import 'package:knockknock/manager/nav1_message/m_myside_chatbox.dart';
 import 'package:knockknock/manager/nav1_message/m_otherside_chatbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class ManagerChatscreen extends StatefulWidget {
-  const ManagerChatscreen({super.key});
+  final String managerid;
+  final String seniorid;
+  final String seniorname;
+
+  const ManagerChatscreen({
+    Key? key,
+    required this.managerid,
+    required this.seniorid,
+    required this.seniorname,
+  }) : super(key: key);
 
   @override
-  State<ManagerChatscreen> createState() => _ManagerChatscreenState();
+  State<ManagerChatscreen> createState() => _ManagerChatscreenState(
+        managerid: managerid,
+        seniorid: seniorid,
+        seniorname: seniorname,
+      );
 }
 
 class _ManagerChatscreenState extends State<ManagerChatscreen> {
-  // DB가 어떤 식으로 구성되는지 모르겠어서 일단은 리스트 형태로 더미 데이터 저장해놨습니다.. 추후 수정가능!!!!
-  // 각각 관리 대상자마다 주고 받은 메세지 내용, 시간, isMe(관리자인지 나인지, 관리자가 나), isReply(두드리기에 답장 있는지)를 저장해야 함
-  final List<String> messages = [
-    'test',
-    '약 드셨나요?',
-    'Hello World',
-    'test',
-    '약 드셨나요?',
-    'Hello World',
-    'test',
-    '약 드셨나요?',
-    'Hello World'
-  ];
+  String managerid;
+  String seniorid;
+  String seniorname;
 
-  final List<String> timestamps = [
-    "2024년 2월 9일 13시 20분",
-    "2024년 2월 9일 13시 20분",
-    "2024년 2월 9일 13시 20분",
-    "2024년 2월 9일 13시 20분",
-    "2024년 2월 13일 13시 20분",
-    "2024년 2월 13일 13시 20분",
-    "2024년 2월 13일 13시 20분",
-    "2024년 2월 19일 13시 20분",
-    "2024년 2월 29일 13시 20분",
-  ];
-
-  final List<bool> isMe = [
-    false,
-    true,
-    true,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false
-  ];
-
-  final List<bool> isReply = [
-    false,
-    true,
-    true,
-    false,
-    false,
-    false,
-    false,
-    true,
-    false,
-  ];
+  _ManagerChatscreenState({
+    Key? key,
+    required this.managerid,
+    required this.seniorid,
+    required this.seniorname,
+  });
 
   late ScrollController _scrollController;
-  late bool isWarning =
-      false; // 답장없는게 있는지를 표현, isReply에 flse가 하나라도 있으면 자동으로 true로 세팅
-  late String date = "";
+  bool isWarning = false;
+
+  List<Map<String, dynamic>> checkedData = [];
+  List<Map<String, dynamic>> nowData = [];
+
+  List<String> messages = [];
+  List<String> timestamps = [];
+  List<bool> isMe = [];
+  List<bool> isReply = [];
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    checkIsWarning();
+    fetchChatMessages();
+  }
+
+  Future<void> fetchChatMessages() async {
+    /*
+    [message" 컬렉션 > 현재 관리자 문서 > "senior" 컬렉션 > '현재 돌봄 대상자 문서 > "checked" 컬렉션의 id] 가져오기
+    */
+    QuerySnapshot checkedSnapshot = await FirebaseFirestore.instance
+        .collection('message')
+        .doc(managerid)
+        .collection('senior')
+        .doc(seniorid)
+        .collection('checked')
+        .orderBy('date', descending: false)
+        .get();
+
+    /* 
+    컬렉션 id를 통해, "checked" 컬렉션 내의 모든 문서를 checkedData 리스트에 추가하기
+    */
+    setState(() {
+      checkedData = checkedSnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+
+    /*
+    [message" 컬렉션 > 현재 관리자 문서 > "senior" 컬렉션 > 현재 돌봄 대상자 문서 > "now" 컬렉션의 id] 가져오기
+    */
+    QuerySnapshot nowSnapshot = await FirebaseFirestore.instance
+        .collection('message')
+        .doc(managerid)
+        .collection('senior')
+        .doc(seniorid)
+        .collection('now')
+        .orderBy('date', descending: false)
+        .get();
+
+    // 컬렉션 id를 통해, "now" 컬렉션 내의 모든 문서를 nowData 리스트에 추가
+    setState(() {
+      nowData = nowSnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    });
+
+    /*
+    개별 문서 내에 저장된 메세지 정보 "msg_id", "writer_uid", "context", "date"를 가져와서 해당되는 리스트에 추가하기
+    */
+    for (var data in checkedData) {
+      //메세지 내용 저장
+      setState(() {
+        messages.add(data['context']);
+        //메세지 작성일시 저장
+        timestamps.add(
+            DateFormat('yyyy년 MM월 dd일 HH시 mm분').format(data['date'].toDate()));
+        //메세지의 작성자가 '나(managerid)'인지 '상대쪽(seniorid)'인지 T/F로 구분하기
+        if (data['writer_uid'] == managerid) {
+          //작성자가 '나'인 경우
+          isMe.add(true);
+        } else {
+          //작성자가 '상대쪽'인 경우
+          isMe.add(false);
+        }
+        //"checked" 컬렉션 내의 메세지는 모두 답장을 받은 상태(무조건 T)
+        isReply.add(true);
+      });
+    }
+
+    // "now" 컬렉션 내의 가장 마지막 문서(가장 최근에 보낸 메세지)의 날짜를 가져오기
+    // 차이 = 현재 시간 - 메세지가 생성된 시간
+    Duration difference = DateTime.now()
+        .difference(((nowSnapshot.docs.last['date']) as Timestamp).toDate());
+    bool nowState = true;
+    if (difference.inHours > 6) {
+      //메세지를 보낸지 6시간이 경과된 경우(답장을 받지 못했다고 함)
+      nowState = false;
+    } else {
+      //메세지를 보낸지 6시간이 지나지 않은 경우(답장을 받았다고 가정함)
+      nowState = true;
+    }
+
+    /*
+    개별 문서 내에 저장된 메세지 정보 "msg_id", "writer_uid", "context", "date"를 가져와서 해당되는 리스트에 추가하기
+    */
+    for (var nowdata in nowData) {
+      setState(() {
+        //메세지 내용 저장
+        messages.add(nowdata['context']);
+        //메세지 작성일시 저장
+        timestamps.add(DateFormat('yyyy년 MM월 dd일 HH시 mm분')
+            .format(nowdata['date'].toDate()));
+        //메세지의 작성자는 '나(managerid)'인 경우만 존재, 무조건 T
+        isMe.add(true);
+        //"now" 컬렉션의 가장 마지막 문서(가장 최근 메세지)의 생성일자와 현재 시간과의 차이에 따라 켈렉션 내의 모든 문서의 색이 변함
+        isReply.add(nowState);
+      });
+    }
+
+    setState(() {
+      this.checkedData = checkedData;
+      this.nowData = nowData;
+      this.messages = messages;
+      this.isMe = isMe;
+      this.isReply = isReply;
+      checkIsWarning();
+    });
   }
 
   void checkIsWarning() {
@@ -87,10 +172,6 @@ class _ManagerChatscreenState extends State<ManagerChatscreen> {
     }
   }
 
-  bool printDate(String newDate) {
-    return date != newDate;
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -99,17 +180,18 @@ class _ManagerChatscreenState extends State<ManagerChatscreen> {
 
   @override
   Widget build(BuildContext context) {
+    //fetchChatMessages();
     return Scaffold(
       backgroundColor: MyColor.myBackground,
       appBar: const ManagerAppBar(
-        size: 56,
+        size: 80,
       ),
       bottomNavigationBar: Container(
         color: MyColor.myBackground,
         height: 100,
         child: Center(
           child: Text(
-            isWarning ? "⚠️ 6시간 이상 답이 없습니다 ⚠️" : "정상", // 멘트는 추후 적절하게 변경 예정
+            isWarning ? "경고! 대답없는 문 두드리기가 있습니다" : "정상 상태입니다.",
             style: TextStyle(
               fontSize: isWarning ? 28 : 25,
               color: isWarning ? MyColor.myRed : MyColor.myBlack,
@@ -126,80 +208,29 @@ class _ManagerChatscreenState extends State<ManagerChatscreen> {
         radius: const Radius.circular(20),
         child: ListView.builder(
           controller: _scrollController,
-          itemCount: 9,
+          itemCount: messages.length,
           itemBuilder: (context, index) {
-            String newDate =
-                timestamps[index].split(' ').sublist(0, 3).join(' ');
-
-            if (printDate(newDate)) {
-              // 날짜가 이전 것과 다른 경우는 날짜 + 채팅 박스 출력
-              date = newDate;
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Center(
-                      child: Text(
-                        newDate,
-                        style: const TextStyle(
-                          color: MyColor.myDarkGrey,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                  isMe[index]
-                      ? Padding(
-                          // isMe가 true이면 MySideChatBox
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: MySideChatBox(
-                            message: messages[index],
-                            time: timestamps[index]
-                                .split(' ')
-                                .sublist(3)
-                                .join(' '),
-                            isReply: isReply[index],
-                          ),
-                        )
-                      : Padding(
-                          // isMe가 false이면 OtherSideChatBox
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: OtherSideChatBox(
-                            name: "name",
-                            message: messages[index],
-                            time: timestamps[index]
-                                .split(' ')
-                                .sublist(3)
-                                .join(' '),
-                            profile: "assets/images/user_profile.jpg",
-                          ),
-                        ),
-                ],
+            if (isMe[index]) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: MySideChatBox(
+                  message: messages[index],
+                  time: timestamps[index].split(' ').sublist(3).join(' '),
+                  isReply: isReply[index],
+                ),
               );
             } else {
-              // 날짜가 이전 것과 그대로인 경우는 채팅 박스만 출력
-              return isMe[index]
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 10),
-                      child: MySideChatBox(
-                        message: messages[index],
-                        time: timestamps[index].split(' ').sublist(3).join(' '),
-                        isReply: isReply[index],
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 10),
-                      child: OtherSideChatBox(
-                        name: "name",
-                        message: messages[index],
-                        time: timestamps[index].split(' ').sublist(3).join(' '),
-                        profile: "assets/images/user_profile.jpg",
-                      ),
-                    );
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: OtherSideChatBox(
+                  name: seniorname,
+                  message: messages[index],
+                  time: timestamps[index].split(' ').sublist(3).join(' '),
+                  profile: "assets/images/user_profile.jpg",
+                ),
+              );
             }
           },
         ),

@@ -33,7 +33,7 @@ class _TodoItemState extends State<TodoItem> {
 
   Future<void> _updateToDoInFirestore(String newText) async {
     try {
-      final currentUserUID = 'B0z8CS40r7dtESumdeohkL0Rqyk2'; //현재 user의 UID로 수정
+      final currentUserUID = 'OI75iw9Z1oTlV2EyyL8C'; //현재 user의 UID로 수정
       final seniorUID = widget.seniorUID;
 
       await FirebaseFirestore.instance

@@ -4,11 +4,13 @@ import 'package:knockknock/senior/component/my_appbar.dart';
 import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/screen/profile_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 
 class EmergencyCompletePage extends StatefulWidget {
-  const EmergencyCompletePage({Key? key}) : super(key: key);
-
+  const EmergencyCompletePage({Key? key, required this.address})
+      : super(key: key);
+  final String address;
   @override
   State<StatefulWidget> createState() => _EmergencyCompletePage();
 }
@@ -145,21 +147,24 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                       color: const Color(0xFFCCCCCC),
                                       width: 4), // 회색 테두리
                                 ),
-                                child: const Column(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.location_on,
                                       size: 80,
                                       color: MyColor.myBlue,
                                     ),
-                                    Text(
-                                      '서울특별시 마포구 와우산로 94',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        child: Text(
+                                          widget.address,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                          textAlign: TextAlign.center,
+                                        )),
                                   ],
                                 ),
                               ),

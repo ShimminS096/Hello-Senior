@@ -6,18 +6,24 @@ import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/profile_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:knockknock/senior/screen/response_senior.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-  final VoidCallback? onButtonClicked;
-  const HomePage({super.key, this.onButtonClicked});
+  const HomePage({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
-  String name = '홍길동';
-  String address = '서울특별시 마포구 와우산로 94';
-  String manager = '김아무개 (마포구노인복지센터)';
+  String senioruid =
+      "Y3wkpcrAscFryYYo4UOn"; // [하드코딩] currentUser 함수 사용 가능하면, 사용할 예정
+  String seniorName = ""; // [하드코딩]현재 사용자(돌봄 대상자)의 이름
+  String seniorAddress = "";
+
+  String manageruid = ""; // [하드코딩]
+  String managerName = ""; // [하드코딩]
+  String managerOccupation = ""; // [하드코딩]
+  String managerWorkplace = "";
 
   int _selectedIndex = 1;
   void onLogout() {}
@@ -38,8 +44,55 @@ class _HomePage extends State<HomePage> {
     const EmergencyPage(),
   ];
 
+  //현재 회원의 정보 가져오기
+  void fetchSeniorInfo() async {
+    /*
+    ["users" 컬렉션 > '현재 돌봄 대상자 문서] 가져오기
+    */
+    DocumentSnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(senioruid)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    Map<String, dynamic> data =
+        seniorInfoSnapshot.data() as Map<String, dynamic>;
+
+    seniorName = data['seniorName'];
+    seniorAddress = data['address'];
+    manageruid = data['managerUID'];
+
+    /*
+    ["users" 컬렉션 > '현재 돌봄 대상자 문서] 가져오기
+    */
+    DocumentSnapshot managerInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(manageruid)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    Map<String, dynamic> managerdata =
+        managerInfoSnapshot.data() as Map<String, dynamic>;
+
+    managerName = managerdata['managerName'];
+    managerOccupation = managerdata['occupation'];
+    managerWorkplace = managerdata['workplace'];
+
+    setState(() {
+      this.managerName = managerName;
+      this.seniorName = seniorName;
+      this.managerOccupation = managerOccupation;
+      this.manageruid = manageruid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    fetchSeniorInfo();
     Widget bodyWidget = Container(
       clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(color: Color(0xffEDEDF4)),
@@ -52,8 +105,10 @@ class _HomePage extends State<HomePage> {
             bottom: MediaQuery.of(context).size.height / 2 + 10,
             child: OutlinedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SeniorProfile()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SeniorProfile()));
               },
               style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.zero,
@@ -64,7 +119,7 @@ class _HomePage extends State<HomePage> {
                   )),
               child: SizedBox(
                 width: 354,
-                height: 170,
+                height: 180,
                 child: Stack(
                   children: [
                     Positioned(
@@ -76,8 +131,7 @@ class _HomePage extends State<HomePage> {
                         height: 100,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/basic_profile.png')),
+                              image: AssetImage('assets/basic_profile.png')),
                         ),
                       ),
                     ),
@@ -87,8 +141,8 @@ class _HomePage extends State<HomePage> {
                       child: SizedBox(
                         width: 103,
                         child: Text(
-                          name,
-                          style: const TextStyle(
+                          seniorName,
+                          style: TextStyle(
                             color: Color(0xFF1E1E1E),
                             fontSize: 24,
                             fontFamily: 'Inter',
@@ -105,8 +159,8 @@ class _HomePage extends State<HomePage> {
                       child: SizedBox(
                         width: 176,
                         child: Text(
-                          address,
-                          style: const TextStyle(
+                          seniorAddress,
+                          style: TextStyle(
                             color: Color(0xFF1E1E1E),
                             fontSize: 13,
                             fontFamily: 'Inter',
@@ -121,9 +175,15 @@ class _HomePage extends State<HomePage> {
                       left: 141,
                       top: 110,
                       child: SizedBox(
-                        width: 180,
+                        width: 190,
                         child: Text(
-                          '담당 사회복지사 : $manager',
+                          '담당 ' +
+                              managerOccupation +
+                              ' : ' +
+                              managerName +
+                              ' (' +
+                              managerWorkplace +
+                              ')',
                           style: TextStyle(
                             color: Color(0xFF1E1E1E),
                             fontSize: 13,
@@ -139,7 +199,7 @@ class _HomePage extends State<HomePage> {
                       left: 141,
                       top: 100,
                       child: Container(
-                        width: 180,
+                        width: 190,
                         height: 8,
                         decoration: ShapeDecoration(
                           color: const Color(0xCC3475EB).withOpacity(0.5),
@@ -157,7 +217,7 @@ class _HomePage extends State<HomePage> {
           Positioned(
             left: 50,
             right: 50,
-            top: 250,
+            top: 300,
             child: SizedBox(
               width: 309,
               height: 360,
@@ -172,7 +232,14 @@ class _HomePage extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ResponsePage()));
+                              builder: (context) => ResponsePage(
+                                senioruid: senioruid,
+                                seniorName: seniorName,
+                                manageruid: manageruid,
+                                managerName: managerName,
+                                managerOccupation: managerOccupation,
+                              ),
+                            ));
                       },
                       icon: const Icon(Icons.person_pin_outlined, size: 60),
                       label: const Text(
@@ -202,14 +269,11 @@ class _HomePage extends State<HomePage> {
                     top: 192,
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EmergencyPage()));
+                        _onNavTapped(2);
                       },
-                      icon: const Icon(Icons.warning_amber_rounded, size: 60),
+                      icon: const Icon(Icons.emergency, size: 60),
                       label: const Text(
-                        '긴급 호출',
+                        '긴급\n호출',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -229,6 +293,14 @@ class _HomePage extends State<HomePage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    left: 65,
+                    top: 50.92,
+                    child: SizedBox(
+                      width: 153,
+                      height: 271.08,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -241,7 +313,6 @@ class _HomePage extends State<HomePage> {
     } else if (_selectedIndex == 2) {
       bodyWidget = _navIndex[_selectedIndex];
     }
-
     return DefaultTabController(
         length: 3, // 하단 네비게이션 바의 아이템 개수
         initialIndex: _selectedIndex, // 초기 선택된 인덱스

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
@@ -6,21 +7,48 @@ import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/m_components/m_senior_profile_box.dart';
 import 'package:knockknock/manager/nav3_home/m_selected_knocking.dart';
 import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
+import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
 
 class ManagerHomeInitial extends StatefulWidget {
-  final int numberofSeniors;
-  const ManagerHomeInitial({super.key, required this.numberofSeniors});
+  const ManagerHomeInitial({super.key});
 
   @override
   State<ManagerHomeInitial> createState() => _ManagerHomeInitialState();
 }
 
 class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
+  String manageruid = "OI75iw9Z1oTlV2EyyL8C"; //[하드코딩] 임시로 관리자 uid 넣어줌
+  List<Map<String, dynamic>> seniorDocs = [];
+  int numberofSeniors = 0; // 현재 유저의 id를 manageruid로 가진 유저의 수
+
+  /*
+  manageruid가 현재 유저(관리자)와 같은 돌봄 관리자 문서를 전부 가져오기
+  */
+  Future<void> fetchSeniorDocs() async {
+    QuerySnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('managerUID', isEqualTo: manageruid)
+        .where('role', isEqualTo: 'senior')
+        .get();
+
+    //seniorDocs 리스트에 가져온 문서들을 하나씩 저장하기
+    seniorDocs = seniorInfoSnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+
+    //현재 상태로 갱신하기
+    setState(() {
+      seniorDocs = seniorDocs;
+      numberofSeniors = seniorDocs.length;
+    });
+  }
+
   ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    fetchSeniorDocs();
     _scrollController = ScrollController();
   }
 
@@ -30,11 +58,12 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
     _scrollController.dispose();
   }
 
-  void onSeniorProfileBoxClicked(int index) {
+  void onSeniorProfileBoxClicked(Map<String, dynamic> seniorInfo, int index) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SeniorProfile(index: index),
+        builder: (context) =>
+            SeniorProfile(seniorInfo: seniorInfo, index: index),
       ),
     );
   }
@@ -43,12 +72,33 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SelectedKnocking(),
+        builder: (context) => SelectedKnocking(
+          seniorDocs: seniorDocs,
+          manageruid: manageruid,
+        ),
       ),
     );
   }
 
+  // 💛 전체 문 두드리기
   void onAllNocking() {
+    /*
+    message 컬렉션에 "잘 지내시나요?" 메세지 보내기
+    */
+    seniorDocs.forEach((info) async {
+      await FirebaseFirestore.instance
+          .collection('message')
+          .doc(manageruid)
+          .collection('senior')
+          .doc(info['uid'])
+          .collection('now')
+          .add({
+        'context': "잘 지내시나요?",
+        'date': Timestamp.now(),
+        'writer_uid': manageruid,
+      });
+    });
+
     showDialog(
       context: context,
       builder: ((context) {
@@ -58,7 +108,6 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
             borderRadius: BorderRadius.all(Radius.circular(60)),
           ),
           actions: [
-            // 전체 문 두드리기 구현
             MyPopUp(
               date: getCurrentDateTime(),
               msg: "전체 문 두드리기 완료!",
@@ -105,7 +154,7 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
                   controller: _scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 37),
                   shrinkWrap: true,
-                  itemCount: widget.numberofSeniors,
+                  itemCount: numberofSeniors,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
                     mainAxisSpacing: 15,
@@ -115,8 +164,10 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
                   itemBuilder: (BuildContext context, index) {
                     return SeniorProfileBox(
                       photo: 'assets/images/user_profile.jpg',
-                      name: '이름',
-                      buttonTapped: () => onSeniorProfileBoxClicked(index),
+                      name: seniorDocs[index]['seniorName'],
+                      bgColor: MyColor.myWhite,
+                      buttonTapped: () =>
+                          onSeniorProfileBoxClicked(seniorDocs[index], index),
                     );
                   },
                 ),

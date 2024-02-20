@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/login_signup/i_input_form.dart';
@@ -8,23 +10,40 @@ import 'package:knockknock/components/mytitle.dart';
 import 'package:knockknock/components/mypopup.dart';
 
 class SeniorSignUp extends StatefulWidget {
-  const SeniorSignUp({super.key});
+  final String managerUID;
+
+  const SeniorSignUp({Key? key, required this.managerUID}) : super(key: key);
 
   @override
-  State<SeniorSignUp> createState() => _SeniorSignUpState();
+  State<SeniorSignUp> createState() => _SeniorSignUpState(managerUID);
 }
 
 class _SeniorSignUpState extends State<SeniorSignUp> {
+  //1단계에서 넘겨받은 관리자 UID
+  final String managerUID;
+  _SeniorSignUpState(this.managerUID);
+
+  //2단계에서 입력받는 정보
   bool isAskAuth = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _authController = TextEditingController();
+  String seniorUID = "";
 
   void onSettingProfile() {
     // 프로필 이미지를 설정하는 기능
   }
 
-  void onAskAuth(BuildContext context) {
+  void onSeniorSignUpCancel(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignUpChoose(),
+      ),
+    );
+  }
+
+  void onSeniorSignUpDone(BuildContext context) {
     if (_nameController.text.isEmpty || _phoneController.text.isEmpty) {
       showDialog(
         context: context,
@@ -44,46 +63,10 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
         }),
       );
     } else {
-      setState(() {
-        // 인증 요청
-        isAskAuth = true;
-      });
-    }
-  }
-
-  void onSeniorSignUpCancel(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignUpChoose(),
-      ),
-    );
-  }
-
-  void onSeniorSignUpDone(BuildContext context) {
-    if (_authController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: ((context) {
-          return const AlertDialog(
-            actionsPadding: EdgeInsets.all(0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(60)),
-            ),
-            actions: [
-              MyPopUp(
-                date: "입력 오류",
-                msg: "인증번호를 입력하세요",
-              ),
-            ],
-          );
-        }),
-      );
-    } else {
       // 인증(로그인) 구현 필요
       // 예를 들어, 서버로 인증번호 확인 요청 등
+      _signUpWithEmailAndPassword(context);
       showDialog(
-        // 회원가입이 정상적으로 완료되었을 때 띄울 팝업
         context: context,
         builder: ((context) {
           return AlertDialog(
@@ -99,7 +82,7 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Login(),
+                      builder: (context) => Login(),
                     ),
                   );
                 },
@@ -109,6 +92,39 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
         }),
       );
     }
+  }
+
+  //회원 가입 기능
+  Future<void> _signUpWithEmailAndPassword(BuildContext context) async {
+    UserCredential userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: _phoneController.text + '@knockknock.com',
+            password: _phoneController.text);
+
+    seniorUID = userCredential.user!.uid;
+    //firestore의 users 컬렉션에 신규 관리자 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
+      'seniorUID': seniorUID,
+      'phoneNumber': _phoneController.text,
+      'seniorName': _nameController.text,
+      'role': "senior",
+      'address': "",
+      'detail': "",
+      'protectorPhoneNumber': "",
+      'managerUID': managerUID,
+    });
+
+    // Firestore에서 회원 가입된 신규 시니어와 매칭된 관리자 문서에 대한 참조를 얻음
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('users').doc(managerUID);
+
+    // 문서의 필드를 갱신
+    await documentReference.update({
+      'seniorUIDs': FieldValue.arrayUnion([seniorUID])
+    });
   }
 
   @override
@@ -153,42 +169,26 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
                   InputForm(title: "이름", controller: _nameController),
                   const SizedBox(height: 40),
                   InputForm(title: "전화번호", controller: _phoneController),
-                  isAskAuth
-                      ? Column(
-                          children: [
-                            const SizedBox(height: 40),
-                            InputForm(
-                                title: "인증번호", controller: _authController),
-                            const SizedBox(height: 45),
-                            MyButton(
-                              width: 400,
-                              text: '취소',
-                              buttonColor: MyColor.myMediumGrey,
-                              txtColor: MyColor.myBlack,
-                              buttonTapped: () => onSeniorSignUpCancel(context),
-                            ),
-                            const SizedBox(height: 10),
-                            MyButton(
-                              width: 400,
-                              text: '완료',
-                              buttonColor: MyColor.myBlue,
-                              txtColor: MyColor.myWhite,
-                              buttonTapped: () => onSeniorSignUpDone(context),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            const SizedBox(height: 65),
-                            MyButton(
-                              width: 400,
-                              buttonColor: MyColor.myBlue,
-                              text: "인증번호 요청",
-                              txtColor: Colors.white,
-                              buttonTapped: () => onAskAuth(context),
-                            ),
-                          ],
-                        ),
+                  Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      MyButton(
+                        width: 400,
+                        text: '취소',
+                        buttonColor: MyColor.myMediumGrey,
+                        txtColor: MyColor.myBlack,
+                        buttonTapped: () => onSeniorSignUpCancel(context),
+                      ),
+                      const SizedBox(height: 10),
+                      MyButton(
+                        width: 400,
+                        text: '완료',
+                        buttonColor: MyColor.myBlue,
+                        txtColor: MyColor.myWhite,
+                        buttonTapped: () => onSeniorSignUpDone(context),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

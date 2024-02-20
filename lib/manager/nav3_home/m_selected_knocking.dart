@@ -6,17 +6,37 @@ import 'package:knockknock/components/mytitle.dart';
 import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/m_components/m_senior_profile_box.dart';
 import 'package:knockknock/manager/manager_initial.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SelectedKnocking extends StatefulWidget {
-  const SelectedKnocking({super.key});
+  List<Map<String, dynamic>> seniorDocs;
+  String manageruid;
+
+  SelectedKnocking({
+    Key? key,
+    required this.seniorDocs,
+    required this.manageruid,
+  }) : super(key: key);
 
   @override
-  State<SelectedKnocking> createState() => _SelectedKnockingState();
+  State<SelectedKnocking> createState() => _SelectedKnockingState(
+        seniorDocs: seniorDocs,
+        manageruid: manageruid,
+      );
 }
 
 class _SelectedKnockingState extends State<SelectedKnocking> {
+  final List<Map<String, dynamic>> seniorDocs;
+  final String manageruid;
+
+  _SelectedKnockingState({
+    Key? key,
+    required this.seniorDocs,
+    required this.manageruid,
+  });
+
+  late int numberofSeniors = seniorDocs.length;
   late ScrollController _scrollController;
-  final int numberofSeniors = 10;
   late List<bool> isSelected;
 
   @override
@@ -42,6 +62,24 @@ class _SelectedKnockingState extends State<SelectedKnocking> {
     });
   }
 
+  void sendKnockMsg() async {
+    for (int i = 0; i < isSelected.length; i++) {
+      if (isSelected[i] == true) {
+        await FirebaseFirestore.instance
+            .collection('message')
+            .doc(manageruid)
+            .collection('senior')
+            .doc(seniorDocs[i]['uid'])
+            .collection('now')
+            .add({
+          'context': "잘 지내시나요?",
+          'date': Timestamp.now(),
+          'writer_uid': manageruid,
+        });
+      }
+    }
+  }
+
   void onDone() {
     late String date;
     String msg = "";
@@ -49,7 +87,7 @@ class _SelectedKnockingState extends State<SelectedKnocking> {
 
     setState(() {
       if (isSelected.contains(true)) {
-        // 두드리기 구현 필요
+        sendKnockMsg();
         date = getCurrentDateTime();
         msg = "선택 문 두드리기 완료!";
         donebuttonTapped = () {
@@ -159,10 +197,10 @@ class _SelectedKnockingState extends State<SelectedKnocking> {
                   itemBuilder: (BuildContext context, index) {
                     return SeniorProfileBox(
                       photo: 'assets/images/user_profile.jpg',
-                      name: '이름',
+                      name: seniorDocs[index]['name'],
                       bgColor: isSelected[index]
                           ? MyColor.myMediumGrey.withOpacity(0.6)
-                          : null,
+                          : Colors.white,
                       buttonTapped: () => onSelect(index),
                     );
                   },

@@ -65,20 +65,20 @@ class _ManagerInitialState extends State<ManagerInitial> {
   Widget _buildSelectedScreen() {
     switch (_selectedIndex) {
       case 0:
-        return ManagerMessageInitial(numberofSeniors: _numberofSeniors);
+        return ManagerMessageInitial();
       case 1:
         return ManagerTodoInitial(
           numberofSeniors: _numberofSeniors,
           currentUserUID: 'B0z8CS40r7dtESumdeohkL0Rqyk2', //현재 user의 UID로 변경해야함
         );
       case 2:
-        return ManagerHomeInitial(numberofSeniors: _numberofSeniors);
+        return ManagerHomeInitial();
       case 3:
         return ManagerLocationInitial(numberofSeniors: _numberofSeniors);
       case 4:
-        return const ManagerMenuInitial();
+        return ManagerMenuInitial();
       default:
-        return ManagerHomeInitial(numberofSeniors: _numberofSeniors);
+        return ManagerHomeInitial();
     }
   }
 }

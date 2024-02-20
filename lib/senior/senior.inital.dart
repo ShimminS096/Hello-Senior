@@ -51,11 +51,21 @@ class _SeniorMainState extends State<SeniorInitial> {
           )),
       routes: {
         '/home': (context) => const HomePage(),
-        '/response': (context) => const ResponsePage(),
-        '/response_2': (context) => const ResponseCompletePage(),
+        '/response': (context) => ResponsePage(
+              senioruid: '',
+              seniorName: '',
+              manageruid: '',
+              managerName: '',
+              managerOccupation: '',
+            ),
+        '/response_2': (context) => ResponseCompletePage(
+              manageruid: '',
+              managerName: '',
+              managerOccupation: '',
+              senioruid: '',
+            ),
         '/record': (context) => const RecordPage(),
         '/emergency': (context) => const EmergencyPage(),
-        '/emergency_2': (context) => const EmergencyCompletePage(),
         '/profile': (context) => const SeniorProfile(),
       },
     );

@@ -61,7 +61,7 @@ class _ManagerTodoInitialState extends State<ManagerTodoInitial> {
 
       if (docSnapshot.exists) {
         final data = docSnapshot.data() as Map<String, dynamic>;
-        final seniorName = data['name'] as String;
+        final seniorName = data['seniorName'] as String;
         return seniorName;
       }
     } catch (e) {

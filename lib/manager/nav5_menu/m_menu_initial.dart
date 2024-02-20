@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:knockknock/senior/screen/profile_senior.dart';
 
 class ManagerMenuInitial extends StatefulWidget {
-  const ManagerMenuInitial({super.key});
+  ManagerMenuInitial({super.key});
 
   @override
   State<ManagerMenuInitial> createState() => _ManagerMenuInitialState();
@@ -16,14 +19,90 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
 
   bool isManagerEditing = false;
 
-  void onEditManagerProfile() {
-    setState(() {
-      isManagerEditing = !isManagerEditing;
-    });
+  String name = "";
+  String phonenumber = "";
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserInfo();
   }
 
-  void onManagerLogout() {
-    // 로그아웃 구현 필요
+  Future<void> fetchUserInfo() async {
+    final currentUser = 'OI75iw9Z1oTlV2EyyL8C'; //현재 user로 변경해야함
+    if (currentUser != null) {
+      //final uid = currentUser.uid;
+      final userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc('OI75iw9Z1oTlV2EyyL8C')
+          .get();
+
+      Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
+
+      setState(() {
+        name = data['managerName'];
+        phonenumber = data['phonenumber'];
+        _belongController.text = data['workplace'];
+        _qualificationController.text = data['occupation'];
+      });
+      print(name);
+      print(phonenumber);
+    }
+  }
+
+  void onEditManagerProfile() async {
+    if (isManagerEditing) {
+      // 사용자가 수정 완료 버튼을 눌렀을 때
+      updateManagerProfile();
+    } else {
+      setState(() {
+        isManagerEditing = true;
+      });
+    }
+  }
+
+  void updateManagerProfile() async {
+    // 사용자가 수정 완료 버튼을 눌렀을 때
+    final newData = {
+      'occupation': _qualificationController.text,
+      'workplace': _belongController.text,
+    };
+
+    try {
+      final currentUser = 'OI75iw9Z1oTlV2EyyL8C'; // 현재 사용자 ID로 수정해야함
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser)
+          .update(newData);
+
+      // Firestore 업데이트 후 다시 사용자 정보 가져와서 화면 업데이트
+      final updatedData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser)
+          .get();
+      Map<String, dynamic> updatedUserData =
+          updatedData.data() as Map<String, dynamic>;
+
+      setState(() {
+        name = updatedUserData['managerName'];
+        phonenumber = updatedUserData['phonenumber'];
+        _belongController.text = updatedUserData['workplace'];
+        _qualificationController.text = updatedUserData['occupation'];
+        isManagerEditing = false; // '완료' 버튼 상태 업데이트
+      });
+    } catch (e) {
+      print('데이터 업데이트 실패: $e');
+    }
+  }
+
+  Future<void> onManagerLogout() async {
+    // 로그아웃 구현
+    try {
+      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      await firebaseAuth.signOut();
+    } catch (e) {
+      print('로그아웃 실패 오류 : $e');
+    }
   }
 
   @override
@@ -54,8 +133,8 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "홍길동",
+                  Text(
+                    name,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -80,7 +159,7 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20)),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 30),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +173,8 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                             ),
                           ),
                           Text(
-                            "010-0000-0000",
+                            //실제 이용자 전화번호
+                            phonenumber,
                             style: TextStyle(fontSize: 22),
                           ),
                         ],
@@ -137,8 +217,9 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 border: InputBorder.none,
-                                hintText:
-                                    isManagerEditing ? "010-0000-0000" : "",
+                                hintText: isManagerEditing
+                                    ? "사회복지사 혹은 요양보호사"
+                                    : _qualificationController.text,
                                 hintStyle: const TextStyle(color: Colors.grey),
                               ),
                               enabled: isManagerEditing,
@@ -184,8 +265,9 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 border: InputBorder.none,
-                                hintText:
-                                    isManagerEditing ? "010-0000-0000" : "",
+                                hintText: isManagerEditing
+                                    ? "OO센터"
+                                    : _belongController.text,
                                 hintStyle: const TextStyle(color: Colors.grey),
                               ),
                               enabled: isManagerEditing,

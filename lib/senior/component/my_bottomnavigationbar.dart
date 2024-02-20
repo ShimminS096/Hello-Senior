@@ -20,7 +20,6 @@ class MyCustomBottomNavigationBar extends StatelessWidget {
             color: Colors.white.withOpacity(1), //네비게이션 바 색
             height: 100,
             child: Container(
-              // color: Colors.white, //네비게이션 바 색
               height: 100,
               alignment: const Alignment(0, 0),
               child: TabBar(

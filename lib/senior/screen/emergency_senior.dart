@@ -1,14 +1,36 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
 import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/emergency_2_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/screen/profile_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:knockknock/senior/senior.inital.dart';
+import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+Future<void> _updateLocationInFirestore(
+    String addr, double lat, double lng) async {
+  try {
+    final currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //해당 돌봄대상자의 UID로 수정
+    await FirebaseFirestore.instance
+        .collection('location')
+        .doc(currentSeniorUID)
+        .update({
+      'CurrentLocation': addr,
+      'LatLng': [lat, lng],
+    });
+  } catch (e) {
+    print("Error updating todo: $e");
+  }
+}
+
+String addr = "로딩 중...";
 String managerName = '김 아무개';
-String seniorAddress = '서울특별시 마포구 와우산로 94';
 String nokPhoneNumber = '010-1234-5678';
 
 class EmergencyPage extends StatefulWidget {
@@ -19,17 +41,73 @@ class EmergencyPage extends StatefulWidget {
 }
 
 class _EmergencyPage extends State<EmergencyPage> {
+  late double lat = 0;
+  late double lng = 0;
+  Location location = Location();
+  bool _serviceEnabled = false;
+  late PermissionStatus _permissionGranted;
+  @override
+  void initState() {
+    super.initState();
+    _locateMe();
+    _startLocationUpdates();
+  }
+
+  void _startLocationUpdates() {
+    _locateMe();
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      _locateMe();
+    });
+  }
+
+  _locateMe() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    await location.getLocation().then((res) {
+      setState(() {
+        lat = res.latitude!;
+        lng = res.longitude!;
+      });
+    });
+    setState(() {
+      addr = getPlaceAddress(lat, lng).toString();
+    });
+  }
+
+  Future<String> getPlaceAddress(double lat, double lng) async {
+    var GOOGLE_API_KEY = 'AIzaSyAz9sHZe25LtBkA0ujUCMy472amlfrJCes';
+    final url = Uri.parse(
+        'https://maps.google.com/maps/api/geocode/json?latlng=$lat,$lng&key=$GOOGLE_API_KEY');
+    final response = await http.post(url, body: {
+      'key': 'value',
+    });
+    if (response.statusCode == 200) {
+      String addr =
+          await jsonDecode(response.body)['results'][0]['formatted_address'];
+      return addr;
+    } else {
+      throw Exception('Failed to fetch address');
+    }
+  }
+
   int _selectedIndex = 2;
   void goHome() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
-
-  final List<Widget> _navIndex = [
-    const RecordPage(),
-    const HomePage(),
-    const EmergencyPage(),
-  ];
 
   void _onNavTapped(int index) {
     setState(() {
@@ -142,20 +220,45 @@ class _EmergencyPage extends State<EmergencyPage> {
                                     color: const Color(0xFFCCCCCC),
                                     width: 4), // 회색 테두리
                               ),
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
+                                  //위치
+                                  const Icon(
                                     Icons.location_on,
                                     size: 80,
                                     color: MyColor.myRed,
                                   ),
-                                  Text(
-                                    '서울특별시 마포구 와우산로 94',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400),
-                                    textAlign: TextAlign.center,
+                                  FutureBuilder<String>(
+                                    future: getPlaceAddress(lat, lng),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Text(
+                                          '로딩 중...',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400),
+                                          textAlign: TextAlign.center,
+                                        );
+                                      } else {
+                                        String emergencyAddr =
+                                            snapshot.data.toString();
+                                        _updateLocationInFirestore(
+                                            emergencyAddr, lat, lng);
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0),
+                                          child: Text(
+                                            snapshot.data ?? 'GPS를 켜주세요.',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ],
                               ),
@@ -210,20 +313,22 @@ class _EmergencyPage extends State<EmergencyPage> {
                       right: 50,
                       top: 250,
                       child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          String address = await getPlaceAddress(lat, lng);
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const EmergencyCompletePage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EmergencyCompletePage(
+                                    address: address ?? 'Unknown')),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           fixedSize: const Size(333, 70),
                           backgroundColor: MyColor.myRed,
                           foregroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
                         ),
                         child: const Text(
                           '연락처 & 위치 정보 전송',
@@ -237,8 +342,7 @@ class _EmergencyPage extends State<EmergencyPage> {
                           ),
                         ),
                       ),
-                    ),
-                    // '긴급 상황이십니까?'
+                    ), // '긴급 상황이십니까?'
                     const Positioned(
                       left: 0,
                       right: 0,

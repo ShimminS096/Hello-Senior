@@ -4,20 +4,60 @@ import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:knockknock/senior/screen/response_2_senior.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 
 class ResponsePage extends StatefulWidget {
-  const ResponsePage({Key? key}) : super(key: key);
+  final String manageruid;
+  final String senioruid;
+  final String seniorName;
+  final String managerName;
+  final String managerOccupation;
+
+  ResponsePage({
+    Key? key,
+    required this.senioruid,
+    required this.seniorName,
+    required this.manageruid,
+    required this.managerName,
+    required this.managerOccupation,
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ResponsePage();
+  State<StatefulWidget> createState() => _ResponsePage(
+        senioruid: senioruid,
+        seniorName: seniorName,
+        manageruid: manageruid,
+        managerName: managerName,
+        managerOccupation: managerOccupation,
+      );
 }
 
 class _ResponsePage extends State<ResponsePage> {
+  String manageruid;
+  String senioruid;
+  String seniorName;
+  String managerName;
+  String managerOccupation;
+
+  _ResponsePage({
+    Key? key,
+    required this.senioruid,
+    required this.seniorName,
+    required this.manageruid,
+    required this.managerName,
+    required this.managerOccupation,
+  });
+
   void goBack() {}
-  bool isKnocked = false;
-  String managerName = '김 아무개';
-  String knockTime = 'XX.XX OO:OO';
-  String lastResponseTime = '20XX.XX.XX';
+
+  bool isKnocked = false; // 대화 내역 없음[디폴트]
+
+  String knockTime = '';
+  String lastResponseTime = '';
+
+  late QuerySnapshot seniorMsgSnapshot; // 컬렉션 이동용
 
   int _selectedIndex = 0;
   final List<Widget> _navIndex = [
@@ -31,8 +71,100 @@ class _ResponsePage extends State<ResponsePage> {
     });
   }
 
+  void fetchKnockMessage() async {
+    /*
+    ["users" 컬렉션 > '현재 돌봄 대상자 문서] 가져오기
+    */
+    DocumentSnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(senioruid)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    Map<String, dynamic> data =
+        seniorInfoSnapshot.data() as Map<String, dynamic>;
+
+    seniorName = data['seniorName'];
+    manageruid = data['managerUID'];
+
+    /*
+    ["users" 컬렉션 > '현재 돌봄 대상자 문서] 가져오기
+    */
+    DocumentSnapshot managerInfoSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(manageruid)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    Map<String, dynamic> managerdata =
+        managerInfoSnapshot.data() as Map<String, dynamic>;
+
+    managerName = managerdata['managerName'];
+    managerOccupation = managerdata['occupation'];
+
+    /*
+    [message" 컬렉션 > 현재 관리자 문서 > "senior" 컬렉션 > 현재 돌봄 대상자 문서] 가져오기
+    */
+    seniorMsgSnapshot = await FirebaseFirestore.instance
+        .collection('message')
+        .doc(manageruid)
+        .collection('senior')
+        .doc(senioruid)
+        .collection('now')
+        .orderBy('date', descending: true)
+        .get();
+
+    //만약 context에 담긴 내용이 'NEW_CREATE'
+
+    QuerySnapshot seniorCheckedMsgSnapshot = await FirebaseFirestore.instance
+        .collection('message')
+        .doc(manageruid)
+        .collection('senior')
+        .doc(senioruid)
+        .collection('checked')
+        .orderBy('date', descending: true)
+        .get();
+
+    /* 
+    현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
+    */
+    if (seniorMsgSnapshot.docs.isEmpty) {
+      isKnocked = false;
+    } else {
+      isKnocked = true;
+
+      DocumentSnapshot msg = seniorMsgSnapshot.docs.last;
+      Map<String, dynamic> msgdata = msg.data() as Map<String, dynamic>;
+      knockTime =
+          DateFormat('yyyy년 MM월 dd일 hh시 mm분').format(msgdata['date'].toDate());
+    }
+
+    if (seniorCheckedMsgSnapshot.docs.isEmpty) {
+      lastResponseTime = "문두드리기 내역이 없습니다.";
+    } else {
+      Map<String, dynamic> checkedmsgdata =
+          seniorCheckedMsgSnapshot.docs.first.data() as Map<String, dynamic>;
+      lastResponseTime = DateFormat('yyyy년 MM월 dd일 hh시 mm분')
+          .format(checkedmsgdata['date'].toDate());
+    }
+    setState(() {
+      this.isKnocked = isKnocked;
+      this.knockTime = knockTime;
+      this.lastResponseTime = lastResponseTime;
+      this.managerName = managerName;
+      this.seniorName = seniorName;
+      this.managerOccupation = managerOccupation;
+      this.manageruid = manageruid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    fetchKnockMessage();
     if (!isKnocked) {
       return Scaffold(body: _navIndex[_selectedIndex]);
     } else {
@@ -65,8 +197,7 @@ class _ResponsePage extends State<ResponsePage> {
                           height: 140,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/basic_profile.png'),
+                              image: AssetImage('assets/basic_profile.png'),
                             ),
                           ),
                         ),
@@ -77,7 +208,7 @@ class _ResponsePage extends State<ResponsePage> {
                         top: 170,
                         child: SizedBox(
                           child: Text(
-                            managerName + ' 사회복지사',
+                            managerName + ' ' + managerOccupation,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Color(0xFF1E1E1E),
@@ -113,7 +244,7 @@ class _ResponsePage extends State<ResponsePage> {
                     ),
                     child: Center(
                       child: Text(
-                        '$knockTime\n홍길동 님\n잘 계시나요?',
+                        '$knockTime\n$seniorName 님\n잘 계시나요?',
                         style: const TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w400),
                         textAlign: TextAlign.center,
@@ -148,12 +279,42 @@ class _ResponsePage extends State<ResponsePage> {
                 right: 35,
                 top: 500,
                 child: OutlinedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // "now" 컬렉션의 모든 문서를 "checked" 컬렉션으로 옮기기
+                    List<Map<String, dynamic>> answeredData = seniorMsgSnapshot
+                        .docs
+                        .map((doc) => doc.data() as Map<String, dynamic>)
+                        .toList();
+
+                    answeredData.forEach((data) async {
+                      await FirebaseFirestore.instance
+                          .collection('message')
+                          .doc(manageruid)
+                          .collection('senior')
+                          .doc(senioruid)
+                          .collection('checked')
+                          .add({
+                        'context': data['context'],
+                        'date': data['date'],
+                        'writer_uid': data['writer_uid'],
+                      });
+                    });
+
+                    // "now" 컬렉션의 모든 문서 제거하기
+                    seniorMsgSnapshot.docs.forEach((uselessMsg) async {
+                      await uselessMsg.reference.delete();
+                    });
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const ResponseCompletePage()));
+                          builder: (context) => ResponseCompletePage(
+                            manageruid: manageruid,
+                            managerName: managerName,
+                            managerOccupation: managerOccupation,
+                            senioruid: senioruid, // seniorData에서 uid 가져오기
+                          ),
+                        ));
                   },
                   style: OutlinedButton.styleFrom(
                     fixedSize: const Size(333, 83),

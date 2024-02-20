@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/login_signup/i_input_form.dart';
@@ -6,6 +7,7 @@ import 'package:knockknock/components/mybutton.dart';
 import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/manager_initial.dart';
 import 'package:knockknock/senior/senior.inital.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -19,7 +21,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _authController = TextEditingController();
 
-  void onAskAuth(BuildContext context) {
+  void onLoginClicked(BuildContext context) {
     if (_phoneController.text.isEmpty) {
       showDialog(
         context: context,
@@ -39,45 +41,66 @@ class _LoginState extends State<Login> {
         }),
       );
     } else {
-      setState(() {
-        // 인증 요청
-        isAskAuth = true;
-      });
+      // 인증(로그인) 구현 필요
+      // 예를 들어, 서버로 인증번호 확인 요청 등
+      Future<String> checkedUserState = _signInWithEmailAndPassword(context);
+
+      checkedUserState.then((value) => {
+            if (value == 'manager')
+              {
+                Navigator.push(
+                  // 정상적으로 로그인 되면 시니어, 혹은 관리자 홈으로 이동
+                  // 시니어인지 관리자인지 확인 필요
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ManagerInitial(),
+                  ),
+                )
+              }
+            else if (value == 'senior')
+              {
+                Navigator.push(
+                  // 정상적으로 로그인 되면 시니어, 혹은 관리자 홈으로 이동
+                  // 시니어인지 관리자인지 확인 필요
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SeniorInitial(),
+                  ),
+                )
+              }
+            else
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Login(),
+                  ),
+                )
+              }
+          });
     }
   }
 
-  void onLoginClicked(BuildContext context) {
-    if (_authController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: ((context) {
-          return const AlertDialog(
-            actionsPadding: EdgeInsets.all(0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(60)),
-            ),
-            actions: [
-              MyPopUp(
-                date: "입력 오류",
-                msg: "인증번호를 입력하세요",
-              ),
-            ],
-          );
-        }),
-      );
-    } else {
-      // 인증(로그인) 구현 필요
-      // 예를 들어, 서버로 인증번호 확인 요청 등
+  Future<String> _signInWithEmailAndPassword(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _phoneController.text + '@knockknock.com',
+              password: _phoneController.text);
 
-      Navigator.push(
-        // 정상적으로 로그인 되면 시니어, 혹은 관리자 홈으로 이동
-        // 시니어인지 관리자인지 확인 필요
-        context,
-        MaterialPageRoute(
-          // builder: (context) => const ManagerInitial(),
-          builder: (context) => SeniorInitial(),
-        ),
-      );
+      //로그인하려는 유저가 Authentication에 존재하는 경우
+      DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      // Firestore에서 가져온 문서 데이터
+      var userData = userInfoDoc.data() as Map<String, dynamic>;
+      //manager인지 senior인지 반환하기
+      return userData['role'];
+    } on FirebaseAuthException catch (e) {
+      //유저 인증 실패
+      return "Authentication_Error";
     }
   }
 
@@ -155,34 +178,14 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 30),
                   InputForm(title: "전화번호", controller: _phoneController),
-                  isAskAuth
-                      ? Column(
-                          children: [
-                            const SizedBox(height: 30),
-                            InputForm(
-                                title: "인증번호", controller: _authController),
-                            const SizedBox(height: 45),
-                            MyButton(
-                              width: 400,
-                              buttonColor: MyColor.myBlue,
-                              text: "확인",
-                              txtColor: Colors.white,
-                              buttonTapped: () => onLoginClicked(context),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            const SizedBox(height: 45),
-                            MyButton(
-                              width: 400,
-                              buttonColor: MyColor.myBlue,
-                              text: "인증번호 요청",
-                              txtColor: Colors.white,
-                              buttonTapped: () => onAskAuth(context),
-                            ),
-                          ],
-                        ),
+                  const SizedBox(height: 30),
+                  MyButton(
+                    width: 400,
+                    buttonColor: MyColor.myBlue,
+                    text: "확인",
+                    txtColor: Colors.white,
+                    buttonTapped: () => onLoginClicked(context),
+                  ),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: 400,
