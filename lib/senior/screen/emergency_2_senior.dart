@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
@@ -208,7 +209,14 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                         right: 50,
                         top: 250,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            FirebaseFirestore.instance
+                                .collection('emergencyCall')
+                                .doc(currentSeniorUID)
+                                .update({
+                              'isEmergency': false,
+                            });
+                          },
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
                                 color:
