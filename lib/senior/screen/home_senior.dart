@@ -105,10 +105,8 @@ class _HomePage extends State<HomePage> {
             bottom: MediaQuery.of(context).size.height / 2 + 10,
             child: OutlinedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SeniorProfile()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SeniorProfile()));
               },
               style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.zero,
