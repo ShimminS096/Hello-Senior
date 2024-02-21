@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
@@ -6,7 +7,6 @@ import 'package:knockknock/components/mytitle.dart';
 import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/m_components/m_senior_profile_box.dart';
 import 'package:knockknock/manager/manager_initial.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SelectedKnocking extends StatefulWidget {
   List<Map<String, dynamic>> seniorDocs;
@@ -69,7 +69,7 @@ class _SelectedKnockingState extends State<SelectedKnocking> {
             .collection('message')
             .doc(manageruid)
             .collection('senior')
-            .doc(seniorDocs[i]['uid'])
+            .doc(seniorDocs[i]['seniorUID'])
             .collection('now')
             .add({
           'context': "잘 지내시나요?",
@@ -197,7 +197,7 @@ class _SelectedKnockingState extends State<SelectedKnocking> {
                   itemBuilder: (BuildContext context, index) {
                     return SeniorProfileBox(
                       photo: 'assets/images/user_profile.jpg',
-                      name: seniorDocs[index]['name'],
+                      name: seniorDocs[index]['seniorName'],
                       bgColor: isSelected[index]
                           ? MyColor.myMediumGrey.withOpacity(0.6)
                           : Colors.white,

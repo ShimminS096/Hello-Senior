@@ -7,7 +7,6 @@ import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/m_components/m_senior_profile_box.dart';
 import 'package:knockknock/manager/nav3_home/m_selected_knocking.dart';
 import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
-import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
 
 class ManagerHomeInitial extends StatefulWidget {
   const ManagerHomeInitial({super.key});
@@ -24,7 +23,7 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
   /*
   manageruid가 현재 유저(관리자)와 같은 돌봄 관리자 문서를 전부 가져오기
   */
-  Future<void> fetchSeniorDocs() async {
+  void fetchSeniorDocs() async {
     QuerySnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('managerUID', isEqualTo: manageruid)
@@ -90,7 +89,7 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
           .collection('message')
           .doc(manageruid)
           .collection('senior')
-          .doc(info['uid'])
+          .doc(info['seniorUID'])
           .collection('now')
           .add({
         'context': "잘 지내시나요?",

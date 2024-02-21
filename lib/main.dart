@@ -25,8 +25,8 @@ class _KnockKnockState extends State<KnockKnock> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // home: Login(),
-      home: ManagerInitial(),
-      // home: SeniorInitial(),
+      // home: ManagerInitial(),
+      home: SeniorInitial(),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
-import 'package:knockknock/senior/screen/emergency_senior.dart';
-import 'package:knockknock/senior/screen/home_senior.dart';
-import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:knockknock/senior/screen/response_2_senior.dart';
+import 'package:knockknock/senior/screen/home_senior.dart';
+import 'package:knockknock/senior/screen/emergency_senior.dart';
+import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
@@ -60,8 +60,8 @@ class _ResponsePage extends State<ResponsePage> {
   late QuerySnapshot seniorMsgSnapshot; // 컬렉션 이동용
 
   int _selectedIndex = 0;
-  final List<Widget> _navIndex = [
-    const RecordPage(),
+  List<Widget> _navIndex = [
+    RecordPage(),
     const HomePage(),
     const EmergencyPage(),
   ];
@@ -137,7 +137,7 @@ class _ResponsePage extends State<ResponsePage> {
     } else {
       isKnocked = true;
 
-      DocumentSnapshot msg = seniorMsgSnapshot.docs.last;
+      DocumentSnapshot msg = seniorMsgSnapshot.docs.first;
       Map<String, dynamic> msgdata = msg.data() as Map<String, dynamic>;
       knockTime =
           DateFormat('yyyy년 MM월 dd일 hh시 mm분').format(msgdata['date'].toDate());
@@ -166,7 +166,20 @@ class _ResponsePage extends State<ResponsePage> {
   Widget build(BuildContext context) {
     fetchKnockMessage();
     if (!isKnocked) {
-      return Scaffold(body: _navIndex[_selectedIndex]);
+      return DefaultTabController(
+          length: 3,
+          initialIndex: 0,
+          child: Scaffold(
+            backgroundColor: _selectedIndex == 2
+                ? const Color(0xffeeccca)
+                : const Color(0xffEDEDF4),
+            body: _navIndex[_selectedIndex],
+            bottomNavigationBar: _selectedIndex == 1
+                ? null
+                : MyCustomBottomNavigationBar(
+                    onTabTapped: _onNavTapped,
+                  ),
+          ));
     } else {
       return Scaffold(
         appBar: const MyAppBar(
@@ -174,7 +187,7 @@ class _ResponsePage extends State<ResponsePage> {
         ),
         body: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(color: Color(0xFFEDEDF4)),
+          decoration: BoxDecoration(color: Color(0xFFEDEDF4)),
           //배경
           child: Stack(
             children: [
@@ -183,7 +196,7 @@ class _ResponsePage extends State<ResponsePage> {
                 left: 0,
                 right: 0,
                 top: 50,
-                child: SizedBox(
+                child: Container(
                   width: 354,
                   height: 250,
                   child: Stack(
@@ -210,7 +223,7 @@ class _ResponsePage extends State<ResponsePage> {
                           child: Text(
                             managerName + ' ' + managerOccupation,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Color(0xFF1E1E1E),
                               fontSize: 30,
                               fontFamily: 'Inter',
@@ -237,15 +250,15 @@ class _ResponsePage extends State<ResponsePage> {
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
-                        side: const BorderSide(
-                            color: Color.fromARGB(255, 206, 206, 206),
+                        side: BorderSide(
+                            color: const Color.fromARGB(255, 206, 206, 206),
                             width: 3),
                       ),
                     ),
                     child: Center(
                       child: Text(
-                        '$knockTime\n$seniorName 님\n잘 계시나요?',
-                        style: const TextStyle(
+                        knockTime + '\n' + seniorName + ' 님\n잘 계시나요?',
+                        style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w400),
                         textAlign: TextAlign.center,
                       ),
@@ -316,13 +329,6 @@ class _ResponsePage extends State<ResponsePage> {
                           ),
                         ));
                   },
-                  style: OutlinedButton.styleFrom(
-                    fixedSize: const Size(333, 83),
-                    backgroundColor: const Color(0xFF3475EB),
-                    foregroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(60))),
-                  ),
                   child: const Text(
                     '대답하기',
                     textAlign: TextAlign.center,
@@ -333,6 +339,13 @@ class _ResponsePage extends State<ResponsePage> {
                       fontWeight: FontWeight.w400,
                       height: 0,
                     ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    fixedSize: Size(333, 83),
+                    backgroundColor: Color(0xFF3475EB),
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(60))),
                   ),
                 ),
               ),

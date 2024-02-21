@@ -131,7 +131,8 @@ class _HomePage extends State<HomePage> {
                         height: 100,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/basic_profile.png')),
+                              image: AssetImage(
+                                  'assets/images/basic_profile.png')),
                         ),
                       ),
                     ),
@@ -184,7 +185,7 @@ class _HomePage extends State<HomePage> {
                               ' (' +
                               managerWorkplace +
                               ')',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(0xFF1E1E1E),
                             fontSize: 13,
                             fontFamily: 'Inter',
