@@ -6,7 +6,6 @@ import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 
 class ResponsePage extends StatefulWidget {
   final String manageruid;
@@ -174,11 +173,6 @@ class _ResponsePage extends State<ResponsePage> {
                 ? const Color(0xffeeccca)
                 : const Color(0xffEDEDF4),
             body: _navIndex[_selectedIndex],
-            bottomNavigationBar: _selectedIndex == 1
-                ? null
-                : MyCustomBottomNavigationBar(
-                    onTabTapped: _onNavTapped,
-                  ),
           ));
     } else {
       return Scaffold(
