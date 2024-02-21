@@ -16,7 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> _updateLocationInFirestore(
     String addr, double lat, double lng) async {
   try {
-    final currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //해당 돌봄대상자의 UID로 수정
+    currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //해당 돌봄대상자의 UID로 수정
     await FirebaseFirestore.instance
         .collection('location')
         .doc(currentSeniorUID)
@@ -32,6 +32,7 @@ Future<void> _updateLocationInFirestore(
 String addr = "로딩 중...";
 String managerName = '김 아무개';
 String nokPhoneNumber = '010-1234-5678';
+String currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //현재 유저 아이디 하드코딩
 
 class EmergencyPage extends StatefulWidget {
   const EmergencyPage({Key? key}) : super(key: key);
@@ -314,6 +315,12 @@ class _EmergencyPage extends State<EmergencyPage> {
                       top: 250,
                       child: OutlinedButton(
                         onPressed: () async {
+                          FirebaseFirestore.instance
+                              .collection('emergencyCall')
+                              .doc(currentSeniorUID)
+                              .update({
+                            'isEmergency': true,
+                          });
                           String address = await getPlaceAddress(lat, lng);
                           Navigator.push(
                             context,
