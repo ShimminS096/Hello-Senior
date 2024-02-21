@@ -66,7 +66,7 @@ class _SeniorMainState extends State<SeniorInitial> {
             ),
         '/record': (context) => const RecordPage(),
         '/emergency': (context) => const EmergencyPage(),
-        '/profile': (context) => const SeniorProfile(),
+        '/profile': (context) =>  SeniorProfile(),
       },
     );
   }
