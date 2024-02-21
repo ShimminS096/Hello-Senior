@@ -4,13 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
 import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
+import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
-import 'package:knockknock/senior/screen/response_senior.dart';
 import 'package:knockknock/senior/senior.inital.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => _RecordPage();
 }
@@ -28,6 +27,11 @@ class _RecordPage extends State<RecordPage> {
     });
   }
 
+  final List<Widget> _navIndex = [
+    const RecordPage(),
+    const HomePage(),
+    const EmergencyPage(),
+  ];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -192,14 +196,11 @@ class ChatScreenState extends State<ChatScreen> {
 
 class BubblePainter extends CustomPainter {
   final Color color;
-
   BubblePainter({
     required this.color,
   });
-
   final _radius = 10.0;
   final _x = 10.0;
-
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRRect(
