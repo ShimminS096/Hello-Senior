@@ -156,12 +156,14 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   <li>
     Since our project utilizes the function of firebase, please execute the following command at the terminal of the project document location.<br>
 	  ```bash
+	  
 	  flutter pub add firebase_core
 	  flutter pub add firebase_auth
 	  flutter pub add cloud_firestore
-
+		```
 	If an error occurs, please enter the following command at the terminal.<br>
  	```bash
+  
 	  flutter pub upgrade
 	  ```
   </li>
