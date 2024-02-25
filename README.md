@@ -1,5 +1,5 @@
 
-<p align="center">
+<p align="center" style="text-align:center;">
   <h1 align="center">🚪KNOCKKNOCK!🚪</h1>
   <strong>
     KnockKnock is a simple communication app that connects caregivers and elderly people who live alone.
