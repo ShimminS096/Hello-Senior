@@ -29,7 +29,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 - Senior citizens, etc. who are 65 years of age or older living alone or in need of care for their descendants, etc
 - A person who performs a management role, such as a dedicated social welfare worker, life support worker, volunteer, etc
 <br>
-<br>
 
 
 ## 💼 Main Functions
