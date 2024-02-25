@@ -64,7 +64,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2" align="center">Emergency</td>
+    <td rowspan="2" align="center"><strong>Emergency</strong></td>
     <td>
       test
     </td>
@@ -86,7 +86,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <th>Detail</th>
   </tr>
   <tr>
-    <td rowspan="2" align="center"> Message Record </td>
+    <td rowspan="2" align="center"> <strong>Message Record</strong> </td>
     <td>
       test
     </td>
@@ -97,7 +97,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2" align="center"> To-do List </td>
+    <td rowspan="2" align="center"> <strong>To-do List</strong> </td>
     <td>
       test
     </td>
@@ -108,7 +108,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2" align="center"> Location Tracking </td>
+    <td rowspan="2" align="center"> <strong>Location Tracking</strong> </td>
     <td>
       test
     </td>
@@ -119,7 +119,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2" align="center"> Profile Editing </td>
+    <td rowspan="2" align="center"> <strong>Profile Editing</strong> </td>
     <td>
       test
     </td>
