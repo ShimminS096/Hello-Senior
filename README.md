@@ -1,4 +1,6 @@
-# 🚪KNOCKKNOCK!🚪
+<p align="center">
+  # 🚪KNOCKKNOCK!🚪
+</p>
 
 
 ## 🎙️Introduction
