@@ -98,11 +98,11 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
   Future<void> _signUpWithEmailAndPassword(BuildContext context) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: _phoneController.text + '@knockknock.mail',
+            email: _phoneController.text + '@knockknock.com',
             password: _phoneController.text);
 
     seniorUID = userCredential.user!.uid;
-    //firestore의 users 컬렉션에 신규 관리자 문서 등록하기
+    //firestore의 users 컬렉션에 신규 시니어 문서 등록하기
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid)
@@ -115,6 +115,37 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
       'detail': "",
       'protectorPhoneNumber': "",
       'managerUID': managerUID,
+    });
+
+    //firestore의 message 컬렉션에 신규 시니어 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('message')
+        .doc(managerUID)
+        .collection('senior')
+        .doc(userCredential.user!.uid)
+        .set({
+      'name': _nameController.text,
+      'uid': seniorUID,
+    });
+
+    //firestore의 todo_list 컬렉션에 신규 시니어 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('todo_list')
+        .doc(managerUID)
+        .collection(userCredential.user!.uid)
+        .doc('todos')
+        .set({
+      'todo': [],
+    });
+
+    //firestore의 location 컬렉션에 신규 시니어 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('location')
+        .doc(userCredential.user!.uid)
+        .set({
+      'CurrentLocation': "",
+      'LatLng': [0, 0], //location 로직을 몰라서 완벽하지 않음
+      'SeniorName': _nameController.text,
     });
 
     // Firestore에서 회원 가입된 신규 시니어와 매칭된 관리자 문서에 대한 참조를 얻음
