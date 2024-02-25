@@ -33,6 +33,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 💼 Main Functions
-1. Knocking on the Door: Communication Function between Elderly and Caregivers
+1. <strong>Knocking on the Door:</strong> Communication Function between Elderly and Caregivers
 2. Emergency help request function for the elderly
 3. Functions that make the work of a caregiver convenient: To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
