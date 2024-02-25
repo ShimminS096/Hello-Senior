@@ -1,6 +1,8 @@
-<p align="center">
+<p style="text-align:center; font-size:20px;">
   # 🚪KNOCKKNOCK!🚪
 </p>
+
+
 
 
 ## 🎙️Introduction
