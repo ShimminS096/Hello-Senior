@@ -43,11 +43,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   </li> 
 </ol>
 
-| Function | Demo | Detail |
-|----------|--------|------|
-| Knocking | | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.|
-| Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
-
 <table>
   <tr>
     <th>Function</th>
@@ -68,7 +63,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <td> In an emergency, the elderly can send their real-time location information to the manager. </td>
   </tr>
 </table>
-
 <br>
 <br>
 
@@ -83,13 +77,61 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 📃 Detail
-| Function | Demo | Detail |
-|----------|--------|------|
-| Message Record | | Seniors and managers can view the message records. If the manager hasn't received a reply after more than 6 hours, an alert window will appear on the manager's side. |
-| To-do List | | Managers can create to-do lists for the elderly under their care. |
-| Location Tracking | | While the app is running, the location of the elderly is recorded at regular intervals. Then, the administrator can check the location of the elderly based on the stored location data. |
-| Profile Editing | | The managers can change their profile and some of the profile information of the elderly. Seniors can only view their profile information. |
-| Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
+<table>
+  <tr>
+    <th>Function</th>
+    <th>Detail</th>
+  </tr>
+  <tr>
+    <td rowspan="2">
+      Message Record</td>
+    <td>
+      test
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      Seniors and managers can view the message records. If the manager hasn't received a reply after more than 6 hours, an alert window will appear on the manager's side. 
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">To-do List</td>
+    <td>
+      test
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      Managers can create to-do lists for the elderly under their care. 
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">
+      Location Tracking
+    </td>
+    <td>
+      test
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      While the app is running, the location of the elderly is recorded at regular intervals. Then, the administrator can check the location of the elderly based on the stored location data. 
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="2">
+      Profile Editing
+    </td>
+    <td>
+      test
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      The managers can change their profile and some of the profile information of the elderly. Seniors can only view their profile information. 
+    </td>
+  </tr>
+</table>
 <br>
 <br>
 
