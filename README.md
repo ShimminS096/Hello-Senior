@@ -50,14 +50,12 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 <table>
   <tr>
     <th>Function</th>
-    <the><strong>Detail</strong></th>
+    <the>Detail></th>
   </tr>
   <tr>
     <td rowspan="2" align="center">Knocking</td>
     <td>
-      <video controls>
-	      <source src="knock.mp4" type="video/mp4">
-      </video>
+      test
     </td>
   </tr>
   <tr>
