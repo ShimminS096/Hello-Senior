@@ -59,7 +59,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 | Function | Demo & Detail |
 |----------|---------------|
 | Knocking |    test           |
-| <td rowspan=2>The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.</td> |
+| <td rowspan=2></td> | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.|
 | Message Record | | |
 | To-do List | | |
 | Location Tracking | | |
