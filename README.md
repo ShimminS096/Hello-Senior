@@ -43,3 +43,11 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <strong>Functions that make the work of a caregiver convenient:</strong><br> To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
   </li> 
 </ol>
+<br>
+<br>
+
+
+## 📋 Flowchart
+<p align="center">
+  <img src="KNOCKKNOCK!.png" alt="KNOCKKNOCK! LOGO" width="300px">
+</p>
