@@ -80,15 +80,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 <br>
 
 
-## 📋 Flowchart
-<p align="center">
-  <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="1800px">
-</p>
-<br>
-<br>
-
-
-
 ## 📃 Detail
 <table>
   <tr>
@@ -140,6 +131,14 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
 </table>
+<br>
+<br>
+
+
+## 📋 Flowchart
+<p align="center">
+  <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="1800px">
+</p>
 <br>
 <br>
 
