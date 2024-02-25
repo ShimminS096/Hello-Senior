@@ -48,5 +48,5 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 ## 📋 Flowchart
 <p align="center">
-  <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="400px">
+  <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="600px">
 </p>
