@@ -155,6 +155,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 	  flutter pub add firebase_core
 	  flutter pub add firebase_auth
 	  flutter pub add cloud_firestore
+	  flutter pub add intl
 
 If an error occurs, please enter the following command at the terminal.<br>
   
