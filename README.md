@@ -67,4 +67,23 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 | Location Tracking | | While the app is running, the location of the elderly is recorded at regular intervals. Then, the administrator can check the location of the elderly based on the stored location data. |
 | Profile Editing | | The managers can change their profile and some of the profile information of the elderly. Seniors can only view their own profile information. |
 | Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
+<br>
+<br>
 
+
+## 👟 How To Run Code
+
+<br>
+<br>
+
+
+## 🔧 Tools
+- Design : ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+<br>
+<br>
+
+
+## 👥 Team
+
+<br>
+<br>
