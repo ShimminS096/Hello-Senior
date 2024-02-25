@@ -39,10 +39,12 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 	Caregivers can use the 'knock on the door' event when they are curious about how the elderly are doing. 
   </li>
   <li>
-    <strong>Emergency:</strong><br> Help request function for the elderly
+    <strong>Emergency help request function for the elderly</strong><br>
+	  If the elderly are in a dangerous or urgent need of help, an ‘emergency call’ event can be used. 
   </li> 
   <li>
-    <strong>Functions that make the work of a caregiver convenient:</strong><br> To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
+    <strong>Functions that make the work of a caregiver convenient: To-do list, saving profiles of senior citizens in charge, location tracking of the elderly</strong><br> 
+	  'KnockKnock' offers a number of functions to make it easier for caregivers to work.
   </li> 
 </ol>
 
