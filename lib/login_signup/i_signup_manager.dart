@@ -56,7 +56,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
   Future<void> _signUpWithEmailAndPassword(BuildContext context) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: _phoneController.text + '@knockknock.mail',
+            email: _phoneController.text + '@knockknock.com',
             password: _phoneController.text);
 
     //firestore의 users 컬렉션에 신규 관리자 문서 등록하기
@@ -72,6 +72,21 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
       'seniorUIDs': [],
       'role': "manager",
     });
+
+    //firestore의 message 컬렉션에 신규 관리자 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('message')
+        .doc(userCredential.user!.uid)
+        .set({
+      'name': _nameController.text,
+      'uid': userCredential.user!.uid,
+    });
+
+    //firestore의 todo_list 컬렉션에 신규 관리자 문서 등록하기
+    await FirebaseFirestore.instance
+        .collection('todo_list')
+        .doc(userCredential.user!.uid)
+        .set({});
   }
 
   void onManagerSignUpCancel(BuildContext context) {
