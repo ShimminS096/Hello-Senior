@@ -56,15 +56,15 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 📃 Detail
-| Function | Detail | Demo |
+| Function | Demo | Detail |
 |----------|--------|------|
-| Knocking | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.| |
-| Message Record | | |
-| To-do List | | |
+| Knocking | | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.|
+| Message Record | | Seniors and managers can view the message records. If the manager hasn't received a reply after more than 6 hours, an alert window will appear on the manager's side. |
+| To-do List | | Managers can create to-do lists for the elderly under their care. |
 
-| Function | Detail | Demo |
+| Function | Demo | Detail |
 |----------|--------|------|
-| Location Tracking | | |
-| Profile Editing | | |
-| Emergency | | |
+| Location Tracking | | While the app is running, the location of the elderly is recorded at regular intervals. Then, the administrator can check the location of the elderly based on the stored location data. |
+| Profile Editing | | The managers can change their profile and some of the profile information of the elderly. Seniors can only view their own profile information. |
+| Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
 
