@@ -146,7 +146,31 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 👟 How To Run Code
-
+<ol>
+  <li>
+    First, please accept the code of GitHub as a zip file and decompress it. 
+  </li>
+  <li>
+    We developed the application using flutter. If you don't have flutter installed, please install it.
+  </li> 
+  <li>
+    Since our project utilizes the function of firebase, please execute the following command at the terminal of the project document location.<br>
+	  ```flutter
+	  flutter pub add firebase_core
+	  flutter pub add firebase_auth
+	  flutter pub add cloud_firestore
+	  ```
+	If an error occurs, please enter the following command at the terminal.<br>
+ 	```flutter
+	  flutter pub upgrade
+	  ```
+  </li>
+   <li>
+	Execute the code.<br>
+	   The best recommendation to run is to use the emulator. As we designed the UI to match with iPhone 14 Pro, we recommend running the emulator with the iPhone 14 Pro.<br>
+	   If there is a problem with running the emulator, you can check it by running code in Chrome.
+   </li>
+</ol>
 <br>
 <br>
 
