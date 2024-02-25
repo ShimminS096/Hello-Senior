@@ -1,6 +1,6 @@
 
-<h1 align="center">🚪KNOCKKNOCK!🚪</h1><br>
-KnockKnock is a simple communication app that connects caregivers and elderly people who live alone. 
+<h1 align="center">🚪KNOCKKNOCK!🚪</h1>
+KnockKnock is a simple communication app that connects caregivers and elderly people who live alone.<br> 
 
 
 ## 🎙️Introduction
