@@ -7,6 +7,14 @@
 </p>
 <br>
 
+<p align="center" style="text-align:center;">
+  <h1 align="center">🚪KNOCKKNOCK!🚪</h1>
+  <span style="display: block; text-align: center; font-weight: bold;">
+    KnockKnock is a simple communication app that connects caregivers and elderly people who live alone.
+  </span>
+</p>
+<br>
+
 
 ## 🎙️Introduction
 The elderly and caregivers can communicate with one another with just a few touches. In addition, caregivers can easily manage their communication history and daily schedule through KnockKnock.
