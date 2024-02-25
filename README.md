@@ -49,22 +49,26 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <th>Detail</th>
   </tr>
   <tr>
-    <td rowspan="2" style="text-align:center;">
-      Knocking
-    </td>
+    <td rowspan="2" align="center">Knocking</td>
     <td>
       test
     </td>
   </tr>
   <tr>
-    <td> The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message. </td>
+    <td> 
+      The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message. 
+    </td>
   </tr>
   <tr>
-    <td rowspan="2">Emergency</td>
-    <td>test</td>
+    <td rowspan="2" align="center">Emergency</td>
+    <td>
+      test
+    </td>
   </tr>
   <tr>
-    <td> In an emergency, the elderly can send their real-time location information to the manager. </td>
+    <td> 
+      In an emergency, the elderly can send their real-time location information to the manager. 
+    </td>
   </tr>
 </table>
 <br>
@@ -87,8 +91,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <th>Detail</th>
   </tr>
   <tr>
-    <td rowspan="2">
-      Message Record</td>
+    <td rowspan="2"> Message Record </td>
     <td>
       test
     </td>
@@ -99,7 +102,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2">To-do List</td>
+    <td rowspan="2"> To-do List </td>
     <td>
       test
     </td>
@@ -110,9 +113,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2">
-      Location Tracking
-    </td>
+    <td rowspan="2"> Location Tracking </td>
     <td>
       test
     </td>
@@ -123,9 +124,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     </td>
   </tr>
   <tr>
-    <td rowspan="2">
-      Profile Editing
-    </td>
+    <td rowspan="2"> Profile Editing </td>
     <td>
       test
     </td>
