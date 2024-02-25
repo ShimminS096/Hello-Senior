@@ -98,7 +98,7 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
   Future<void> _signUpWithEmailAndPassword(BuildContext context) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: _phoneController.text + '@knockknock.com',
+            email: _phoneController.text + '@knockknock.mail',
             password: _phoneController.text);
 
     seniorUID = userCredential.user!.uid;
