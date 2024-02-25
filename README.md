@@ -4,7 +4,6 @@
   KnockKnock is a simple communication app that connects caregivers and elderly people who live alone.
 </p>
 <br>
-<br>
 
 
 ## 🎙️Introduction
@@ -49,5 +48,5 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 ## 📋 Flowchart
 <p align="center">
-  <img src="KNOCKKNOCK!_FLOWCHART.jpb" alt="KNOCKKNOCK! FLOWCHART" width="400px">
+  <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="400px">
 </p>
