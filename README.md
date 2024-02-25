@@ -66,3 +66,24 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 | Profile Editing | | |
 | Emergency | | |
 
+<table>
+  <tr>
+    <td>이름</td>
+    <td>나이</td>
+    <td>성별</td>
+  </tr>
+  <tr>
+    <td>John</td>
+    <td rowspan="2">28</td>
+    <td>남성</td>
+  </tr>
+  <tr>
+    <td>Emily</td>
+    <td>여성</td>
+  </tr>
+  <tr>
+    <td>Michael</td>
+    <td>35</td>
+    <td>남성</td>
+  </tr>
+</table>
