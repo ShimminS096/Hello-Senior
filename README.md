@@ -28,3 +28,11 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 - Senior citizens, etc. who are 65 years of age or older living alone or in need of care for their descendants, etc
 - A person who performs a management role, such as a dedicated social welfare worker, life support worker, volunteer, etc
+<br>
+<br>
+
+
+## 💼 Main Functions
+1. Knocking on the Door: Communication Function between Elderly and Caregivers
+2. Emergency help request function for the elderly
+3. Functions that make the work of a caregiver convenient: To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
