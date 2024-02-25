@@ -5,7 +5,7 @@
 
 <h1 align="center">🚪KNOCKKNOCK!🚪</h1>
 <p align="center">
-  <span style="font-size: 24px;">🚪KNOCKKNOCK!🚪:</span>
+  <span style="font-size: 24px;"><h1 align="center">🚪KNOCKKNOCK!🚪</h1></span>
 </p>
 
 
