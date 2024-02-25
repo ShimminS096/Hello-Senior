@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-              email: _phoneController.text + '@knockknock.com',
+              email: _phoneController.text + '@knockknock.mail',
               password: _phoneController.text);
 
       //로그인하려는 유저가 Authentication에 존재하는 경우
