@@ -56,34 +56,15 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 📃 Detail
-| Function | Demo & Detail |
-|----------|---------------|
-| <td rowspan=2>Knocking | test </td> |
-| The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.| |
+| Function | Detail | Demo |
+|----------|--------|------|
+| Knocking | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.| |
 | Message Record | | |
 | To-do List | | |
+
+| Function | Detail | Demo |
+|----------|--------|------|
 | Location Tracking | | |
 | Profile Editing | | |
 | Emergency | | |
 
-<table>
-  <tr>
-    <td>이름</td>
-    <td>나이</td>
-    <td>성별</td>
-  </tr>
-  <tr>
-    <td>John</td>
-    <td rowspan="2">28</td>
-    <td>남성</td>
-  </tr>
-  <tr>
-    <td>Emily</td>
-    <td>여성</td>
-  </tr>
-  <tr>
-    <td>Michael</td>
-    <td>35</td>
-    <td>남성</td>
-  </tr>
-</table>
