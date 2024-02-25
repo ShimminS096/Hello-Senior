@@ -33,10 +33,14 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 
 ## 💼 Main Functions
-<ul>
+<ol>
   <li>
-    1. <strong>Knocking on the Door:</strong> Communication Function between Elderly and Caregivers
+    <strong>Knocking on the Door:</strong> Communication Function between Elderly and Caregivers
   </li>
-  <li></li>2. <strong>Emergency:</strong> Help request function for the elderly
-  <li></li>3. <strong>Functions that make the work of a caregiver convenient:</strong> To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
-</ul>
+  <li>
+    <strong>Emergency:</strong> Help request function for the elderly
+  </li> 
+  <li>
+    <strong>Functions that make the work of a caregiver convenient:</strong> To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
+  </li> 
+</ol>
