@@ -42,6 +42,10 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <strong>Functions that make the work of a caregiver convenient:</strong><br> To-do list, saving profiles of senior citizens in charge, location tracking of the elderly
   </li> 
 </ol>
+|        Function          | 
+| Knocking | Emergency     |
+|----------|---------------|
+| | |
 <br>
 <br>
 
@@ -65,7 +69,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 | Function | Demo | Detail |
 |----------|--------|------|
 | Location Tracking | | While the app is running, the location of the elderly is recorded at regular intervals. Then, the administrator can check the location of the elderly based on the stored location data. |
-| Profile Editing | | The managers can change their profile and some of the profile information of the elderly. Seniors can only view their own profile information. |
+| Profile Editing | | The managers can change their profile and some of the profile information of the elderly. Seniors can only view their profile information. |
 | Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
 <br>
 <br>
