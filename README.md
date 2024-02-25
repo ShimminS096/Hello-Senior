@@ -7,6 +7,9 @@
 <p align="center">
   <span style="font-size: 50px; font-weight: bold;">🚪KNOCKKNOCK!🚪</span>
 </p>
+<p align="center" style="font-size: 50px; font-weight: bold;">
+  🚪KNOCKKNOCK!🚪
+</p>
 
 
 ## 🎙️Introduction
