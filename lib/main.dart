@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:knockknock/login_signup/i_login.dart';
 import 'package:knockknock/manager/manager_initial.dart';
 import 'package:knockknock/manager/nav2_todo/m_todo_initial.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,10 +26,9 @@ class _KnockKnockState extends State<KnockKnock> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      // home: Login(),
-      home: ManagerInitial(),
+      home: Login(),
+      // home: ManagerInitial(),
       // home: SeniorInitial(),
     );
   }
 }
-

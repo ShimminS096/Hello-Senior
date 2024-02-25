@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
@@ -5,9 +6,12 @@ import 'package:knockknock/manager/nav1_message/m_chatscreen.dart';
 import 'package:knockknock/manager/nav1_message/m_message_preview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserUID = auth.currentUser!.uid;
+
 class ManagerMessageInitial extends StatefulWidget {
-  final String managerid = "OI75iw9Z1oTlV2EyyL8C"; //임시로 관리자 uid 넣어줌
-  const ManagerMessageInitial({super.key});
+  final String managerid = currentUserUID;
+  ManagerMessageInitial({super.key});
 
   @override
   State<ManagerMessageInitial> createState() =>

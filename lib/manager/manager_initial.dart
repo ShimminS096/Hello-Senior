@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/components/mypopup.dart';
@@ -8,6 +9,9 @@ import 'package:knockknock/manager/nav3_home/m_home_initial.dart';
 import 'package:knockknock/manager/nav4_location/m_location_initial.dart';
 import 'package:knockknock/manager/nav5_menu/m_menu_initial.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 
 class ManagerInitial extends StatefulWidget {
   const ManagerInitial({Key? key}) : super(key: key);
@@ -33,7 +37,7 @@ class _ManagerInitialState extends State<ManagerInitial> {
   Future<int> _getNumberOfSeniors() async {
     final docSnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .doc('B0z8CS40r7dtESumdeohkL0Rqyk2') // currentUser의 UID로 변경해야 함
+        .doc(currentUserID)
         .get();
     final seniorUIDs = docSnapshot['seniorUIDs'] as List<dynamic>;
     setState(() {
@@ -70,7 +74,7 @@ class _ManagerInitialState extends State<ManagerInitial> {
       case 1:
         return ManagerTodoInitial(
           numberofSeniors: _numberofSeniors,
-          currentUserUID: 'B0z8CS40r7dtESumdeohkL0Rqyk2', //현재 user의 UID로 변경해야함
+          currentUserUID: currentUserID,
         );
       case 2:
         return ManagerHomeInitial();

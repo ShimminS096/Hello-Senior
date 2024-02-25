@@ -78,6 +78,9 @@ class _SeniorProfileState extends State<SeniorProfile> {
       'protectorPhoneNumber': _guardianPhoneNumber,
       'detail': _speciality,
     });
+    _firestore.collection('emergencyCall').doc(uid).update({
+      'protectorPhoneNumber': _guardianPhoneNumber,
+    });
   }
 
   //firestore에서 현재 유저의 문서 가져오기

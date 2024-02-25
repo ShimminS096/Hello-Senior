@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:knockknock/senior/screen/profile_senior.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
+
 class ManagerMenuInitial extends StatefulWidget {
   ManagerMenuInitial({super.key});
 
@@ -29,24 +32,22 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
   }
 
   Future<void> fetchUserInfo() async {
-    final currentUser = 'OI75iw9Z1oTlV2EyyL8C'; //현재 user로 변경해야함
+    final currentUser = currentUserID;
     if (currentUser != null) {
       //final uid = currentUser.uid;
       final userData = await FirebaseFirestore.instance
           .collection('users')
-          .doc('OI75iw9Z1oTlV2EyyL8C')
+          .doc(currentUserID)
           .get();
 
       Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
-
+      print(data);
       setState(() {
         name = data['managerName'];
-        phonenumber = data['phonenumber'];
+        phonenumber = data['phoneNumber'];
         _belongController.text = data['workplace'];
         _qualificationController.text = data['occupation'];
       });
-      print(name);
-      print(phonenumber);
     }
   }
 
@@ -61,7 +62,6 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
     }
   }
 
-
   void updateManagerProfile() async {
     // 사용자가 수정 완료 버튼을 눌렀을 때
     final newData = {
@@ -70,7 +70,7 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
     };
 
     try {
-      final currentUser = 'OI75iw9Z1oTlV2EyyL8C'; // 현재 사용자 ID로 수정해야함
+      final currentUser = currentUserID;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(currentUser)
@@ -115,214 +115,179 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
         title: '메뉴',
         size: 95,
       ),
-      body:  SingleChildScrollView(
-    child: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              width: 450,
-              height: 250,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipOval(
-                    child: Image.asset(
-                      "assets/images/user_profile.jpg",
-                      height: 150,
-                      width: 150,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    name,
-                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: 450,
-              height: 180,
-              decoration: BoxDecoration(
-                color: MyColor.myWhite,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 450,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            width: 200,
-                            child: Text(
-                              "전화번호",
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          Text(
-                            //실제 이용자 전화번호
-                            phonenumber,
-                            style: TextStyle(fontSize: 22),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Divider(
-                    thickness: 1,
-                    height: 0,
-                    color: MyColor.myLightGrey,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  SizedBox(
-                    width: 450,
-                    height: 60,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            width: 200,
-                            child: Text(
-                              '자격',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              controller: _qualificationController,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: MyColor.myBlack,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                border: InputBorder.none,
-                                hintText: isManagerEditing
-                                    ? "사회복지사 혹은 요양보호사"
-                                    : _qualificationController.text,
-                                hintStyle: const TextStyle(color: Colors.grey),
-                              ),
-                              enabled: isManagerEditing,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Divider(
-                    thickness: 1,
-                    height: 0,
-                    color: MyColor.myLightGrey,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  SizedBox(
-                    width: 450,
-                    height: 60,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            width: 200,
-                            child: Text(
-                              "소속",
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              controller: _belongController,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: MyColor.myBlack,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                border: InputBorder.none,
-                                hintText: isManagerEditing
-                                    ? "OO센터"
-                                    : _belongController.text,
-                                hintStyle: const TextStyle(color: Colors.grey),
-                              ),
-                              enabled: isManagerEditing,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: onEditManagerProfile,
-              child: Container(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
                 width: 450,
-                height: 60,
+                height: 250,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipOval(
+                      child: Image.asset(
+                        "assets/images/user_profile.jpg",
+                        height: 150,
+                        width: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      name,
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                width: 450,
+                height: 180,
                 decoration: BoxDecoration(
                   color: MyColor.myWhite,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      isManagerEditing
-                          ? const Text(
-                              "완료",
-                              style: TextStyle(
-                                  color: MyColor.myBlue,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          : const Text(
-                              "정보 수정",
-                              style: TextStyle(
-                                  color: MyColor.myBlue,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 450,
+                      height: 60,
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 200,
+                              child: Text(
+                                "전화번호",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w500),
+                              ),
                             ),
-                    ],
-                  ),
+                            Text(
+                              //실제 이용자 전화번호
+                              phonenumber,
+                              style: TextStyle(fontSize: 22),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      height: 0,
+                      color: MyColor.myLightGrey,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    SizedBox(
+                      width: 450,
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 200,
+                              child: Text(
+                                '자격',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _qualificationController,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  color: MyColor.myBlack,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  border: InputBorder.none,
+                                  hintText: isManagerEditing
+                                      ? "사회복지사 혹은 요양보호사"
+                                      : _qualificationController.text,
+                                  hintStyle:
+                                      const TextStyle(color: Colors.grey),
+                                ),
+                                enabled: isManagerEditing,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      height: 0,
+                      color: MyColor.myLightGrey,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    SizedBox(
+                      width: 450,
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 200,
+                              child: Text(
+                                "소속",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: _belongController,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  color: MyColor.myBlack,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  border: InputBorder.none,
+                                  hintText: isManagerEditing
+                                      ? "OO센터"
+                                      : _belongController.text,
+                                  hintStyle:
+                                      const TextStyle(color: Colors.grey),
+                                ),
+                                enabled: isManagerEditing,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: onManagerLogout,
-              child: Visibility(
-                visible: !isManagerEditing,
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: onEditManagerProfile,
                 child: Container(
                   width: 450,
                   height: 60,
@@ -330,28 +295,67 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                     color: MyColor.myWhite,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "로그아웃",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red),
-                        ),
+                        isManagerEditing
+                            ? const Text(
+                                "완료",
+                                style: TextStyle(
+                                    color: MyColor.myBlue,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500),
+                              )
+                            : const Text(
+                                "정보 수정",
+                                style: TextStyle(
+                                    color: MyColor.myBlue,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500),
+                              ),
                       ],
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: onManagerLogout,
+                child: Visibility(
+                  visible: !isManagerEditing,
+                  child: Container(
+                    width: 450,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: MyColor.myWhite,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "로그아웃",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),),
+      ),
     );
   }
 }

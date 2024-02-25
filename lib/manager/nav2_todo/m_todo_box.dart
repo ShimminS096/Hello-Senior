@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/nav2_todo/m_todo_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 
 class ToDoBox extends StatefulWidget {
   final String name;
@@ -37,7 +41,7 @@ class _ToDoBoxState extends State<ToDoBox> {
     try {
       final docSnapshot = await FirebaseFirestore.instance
           .collection('todo_list')
-          .doc('B0z8CS40r7dtESumdeohkL0Rqyk2') //현재 user의 UID로 변경
+          .doc(currentUserID)
           .collection(widget.seniorUID) // seniorUID에 대한 할 일 목록 가져오기
           .doc('todos')
           .get();
@@ -73,8 +77,7 @@ class _ToDoBoxState extends State<ToDoBox> {
     String todo = todoController.text;
     if (todo.isNotEmpty) {
       try {
-        final currentUserUID =
-            'B0z8CS40r7dtESumdeohkL0Rqyk2'; // 현재 사용자의 UID로 변경해야함
+        final currentUserUID = currentUserID;
         final seniorUID = widget.seniorUID;
 
         FirebaseFirestore.instance

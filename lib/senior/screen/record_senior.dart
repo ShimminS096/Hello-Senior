@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:knockknock/components/color.dart';
@@ -7,6 +8,9 @@ import 'package:knockknock/senior/component/my_bottomnavigationbar.dart';
 import 'package:knockknock/senior/screen/emergency_senior.dart';
 import 'package:knockknock/senior/screen/home_senior.dart';
 import 'package:knockknock/senior/senior.inital.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
@@ -68,8 +72,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  String senioruid =
-      "Y3wkpcrAscFryYYo4UOn"; // [하드코딩] currentUser 함수 사용 가능하면, 사용할 예정
+  String senioruid = currentUserID;
   String manageruid = "";
   List<dynamic> messages = [];
 

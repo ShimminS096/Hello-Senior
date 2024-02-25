@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
 import 'package:knockknock/manager/nav4_location/m_location_box.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 
 class ManagerLocationInitial extends StatefulWidget {
   final int numberofSeniors;
@@ -22,7 +26,6 @@ class LocationHelper {
 
 class _ManagerLocationInitial extends State<ManagerLocationInitial> {
   String? _previewImageURL;
-  String senioruid = "ZGL42b7A51pxoNxoJKPe"; //현재 대상 돌봄대상자의 id로 세팅할 것
   Future<void> _getCurrentLocationData(
       double latitude, double longitude) async {
     final staticImageURL = LocationHelper.generateLocationPreviewImage(
@@ -36,21 +39,33 @@ class _ManagerLocationInitial extends State<ManagerLocationInitial> {
   late ScrollController _scrollController = ScrollController();
   late List<bool> isSelected;
   late QuerySnapshot seniorInfoSnapshot;
+  late QuerySnapshot locationSnapshot;
   late double lat;
   late double lng;
   late String currentLocation;
   late List<DocumentSnapshot> seniorUID_list;
-  late List<String> seniorName_list;
+  List<String> seniorNames = [];
 
   Future<void> readFromFirestore() async {
-    seniorInfoSnapshot =
-        await FirebaseFirestore.instance.collection('location').get();
-    seniorUID_list = seniorInfoSnapshot.docs;
-    seniorName_list = [];
-    for (DocumentSnapshot document in seniorUID_list) {
-      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-      String seniorName = data['SeniorName'];
-      seniorName_list.add(seniorName);
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserID)
+        .get();
+    final seniorUIDs =
+        docSnapshot['seniorUIDs'] as List<dynamic>; // 현재 관리자 담당 senior의 UID 목록
+
+    locationSnapshot = await FirebaseFirestore.instance
+        .collection('location')
+        .where(FieldPath.documentId, whereIn: seniorUIDs)
+        .get();
+    for (String seniorUID in seniorUIDs) {
+      final seniorInfoSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(seniorUID)
+          .get();
+      Map<String, dynamic>? data = seniorInfoSnapshot.data();
+      String seniorName = data?['seniorName'];
+      seniorNames.add(seniorName);
     }
   }
 
@@ -64,7 +79,8 @@ class _ManagerLocationInitial extends State<ManagerLocationInitial> {
 
   Future<void> onSelect(int index) async {
     Map<String, dynamic> data =
-        seniorInfoSnapshot.docs[index].data() as Map<String, dynamic>;
+        locationSnapshot.docs[index].data() as Map<String, dynamic>;
+    print(locationSnapshot);
     lat = data['LatLng'][0];
     lng = data['LatLng'][1];
     currentLocation = data['CurrentLocation'];
@@ -144,7 +160,7 @@ class _ManagerLocationInitial extends State<ManagerLocationInitial> {
                               );
                             } else {
                               return LocationBox(
-                                name: seniorName_list[index],
+                                name: seniorNames[index],
                                 bgColor: isSelected[index]
                                     ? MyColor.myMediumGrey.withOpacity(0.6)
                                     : null,

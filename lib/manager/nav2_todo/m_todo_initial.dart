@@ -37,7 +37,7 @@ class _ManagerTodoInitialState extends State<ManagerTodoInitial> {
     try {
       final docSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc('B0z8CS40r7dtESumdeohkL0Rqyk2') // 현재 사용자의 UID 사용
+          .doc(currentUserID) // 현재 사용자의 UID 사용
           .get();
 
       if (docSnapshot.exists) {

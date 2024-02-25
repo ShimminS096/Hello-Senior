@@ -148,19 +148,23 @@ class _SeniorSignUpState extends State<SeniorSignUp> {
       'SeniorName': _nameController.text,
     });
 
+    // Firestore에서 회원 가입된 신규 시니어와 매칭된 관리자 문서에 대한 참조를 얻음
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('users').doc(managerUID);
+    DocumentSnapshot managerSnapshot =
+        documentReference.get() as DocumentSnapshot<Object?>;
     //firestore의 emergencyCall 컬렉션에 신규 시니어 문서 등록하기
     await FirebaseFirestore.instance
         .collection('emergencyCall')
         .doc(userCredential.user!.uid)
         .set({
       'currentAddr': "",
-      'isEmergency': false, //location 로직을 몰라서 완벽하지 않음
+      'isEmergency': false,
       'SeniorName': _nameController.text,
+      'managerName': managerSnapshot['managerName'],
+      'occupation': managerSnapshot['occupation'],
+      'protectorPhoneNumber': "",
     });
-
-    // Firestore에서 회원 가입된 신규 시니어와 매칭된 관리자 문서에 대한 참조를 얻음
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection('users').doc(managerUID);
 
     // 문서의 필드를 갱신
     await documentReference.update({

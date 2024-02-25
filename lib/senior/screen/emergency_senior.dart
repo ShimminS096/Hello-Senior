@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
@@ -13,10 +14,12 @@ import 'package:knockknock/senior/senior.inital.dart';
 import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 Future<void> _updateLocationInFirestore(
     String addr, double lat, double lng) async {
   try {
-    currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //해당 돌봄대상자의 UID로 수정
+    currentSeniorUID = currentUserID; //해당 돌봄대상자의 UID로 수정
     await FirebaseFirestore.instance
         .collection('location')
         .doc(currentSeniorUID)
@@ -31,8 +34,9 @@ Future<void> _updateLocationInFirestore(
 
 String addr = "로딩 중...";
 String managerName = '김 아무개';
+String managerOccupation = '';
 String nokPhoneNumber = '010-1234-5678';
-String currentSeniorUID = 'Y3wkpcrAscFryYYo4UOn'; //현재 유저 아이디 하드코딩
+String currentSeniorUID = currentUserID; //현재 유저 아이디 하드코딩
 
 class EmergencyPage extends StatefulWidget {
   const EmergencyPage({Key? key}) : super(key: key);
@@ -52,6 +56,18 @@ class _EmergencyPage extends State<EmergencyPage> {
     super.initState();
     _locateMe();
     _startLocationUpdates();
+    fetchEmergencyCallInfo();
+  }
+
+  void fetchEmergencyCallInfo() async {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection('emergencyCall').doc(currentUserID).get();
+    if (snapshot.exists) {
+      managerName = snapshot.data()!['managerName'] ?? '';
+      managerOccupation = snapshot.data()!['occupation'] ?? '';
+      nokPhoneNumber = snapshot.data()!['protectorPhoneNumber'] ?? '';
+    }
   }
 
   void _startLocationUpdates() {
@@ -175,7 +191,7 @@ class _EmergencyPage extends State<EmergencyPage> {
                               top: 170,
                               child: SizedBox(
                                 child: Text(
-                                  managerName + ' 사회복지사',
+                                  managerName + ' ' + managerOccupation,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color(0xFF1E1E1E),
@@ -326,7 +342,10 @@ class _EmergencyPage extends State<EmergencyPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EmergencyCompletePage(
-                                    address: address ?? 'Unknown')),
+                                    address: address ?? 'Unknown',
+                                    nokPhoneNumber: nokPhoneNumber,
+                                    managerName: managerName,
+                                    occupation: managerOccupation)),
                           );
                         },
                         style: OutlinedButton.styleFrom(

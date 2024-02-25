@@ -9,9 +9,18 @@ import 'package:knockknock/senior/screen/profile_senior.dart';
 import 'package:knockknock/senior/screen/record_senior.dart';
 
 class EmergencyCompletePage extends StatefulWidget {
-  const EmergencyCompletePage({Key? key, required this.address})
+  const EmergencyCompletePage(
+      {Key? key,
+      required this.address,
+      required this.nokPhoneNumber,
+      required this.managerName,
+      required this.occupation})
       : super(key: key);
   final String address;
+  final String nokPhoneNumber;
+  final String managerName;
+  final String occupation;
+
   @override
   State<StatefulWidget> createState() => _EmergencyCompletePage();
 }
@@ -96,15 +105,15 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                   ),
                                 ),
                               ),
-                              const Positioned(
+                              Positioned(
                                 left: 0,
                                 right: 0,
                                 top: 170,
                                 child: SizedBox(
                                   child: Text(
-                                    '김아무개 사회복지사',
+                                    '$managerName $managerOccupation',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Color(0xFF1E1E1E),
                                       fontSize: 30,
                                       fontFamily: 'Inter',
@@ -188,9 +197,9 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                       color: Color(0xFFCCCCCC),
                                       width: 4), // 회색 테두리
                                 ),
-                                child: const Text(
-                                  '010-1234-5678',
-                                  style: TextStyle(
+                                child: Text(
+                                  nokPhoneNumber,
+                                  style: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,

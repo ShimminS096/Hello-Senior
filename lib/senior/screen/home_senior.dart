@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/senior/component/my_appbar.dart';
@@ -8,6 +9,9 @@ import 'package:knockknock/senior/screen/record_senior.dart';
 import 'package:knockknock/senior/screen/response_senior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -15,8 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  String senioruid =
-      "Y3wkpcrAscFryYYo4UOn"; // [하드코딩] currentUser 함수 사용 가능하면, 사용할 예정
+  String senioruid = currentUserID;
   String seniorName = ""; // [하드코딩]현재 사용자(돌봄 대상자)의 이름
   String seniorAddress = "";
 
@@ -58,7 +61,7 @@ class _HomePage extends State<HomePage> {
     현재 돌봄 대상자 문서의 정보를 data 라는 Map에 필드별로 넣기 & 정보 가져오기
     */
     Map<String, dynamic> data =
-        seniorInfoSnapshot.data() as Map<String, dynamic>;
+        await seniorInfoSnapshot.data() as Map<String, dynamic>;
 
     seniorName = data['seniorName'];
     seniorAddress = data['address'];
@@ -83,10 +86,10 @@ class _HomePage extends State<HomePage> {
     managerWorkplace = managerdata['workplace'];
 
     setState(() {
-      this.managerName = managerName;
-      this.seniorName = seniorName;
-      this.managerOccupation = managerOccupation;
-      this.manageruid = manageruid;
+      managerName = managerName;
+      seniorName = seniorName;
+      managerOccupation = managerOccupation;
+      manageruid = manageruid;
     });
   }
 
@@ -102,7 +105,7 @@ class _HomePage extends State<HomePage> {
           Positioned(
             left: 30,
             right: 30,
-            bottom: MediaQuery.of(context).size.height / 2 + 10,
+            bottom: MediaQuery.of(context).size.height / 2 + 50,
             child: OutlinedButton(
               onPressed: () {
                 Navigator.push(context,

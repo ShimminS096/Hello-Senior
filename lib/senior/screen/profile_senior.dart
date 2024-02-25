@@ -6,6 +6,9 @@ import 'package:knockknock/senior/component/profile_imang_name.dart';
 import 'package:knockknock/senior/component/profile_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
+
 class SeniorProfile extends StatelessWidget {
   const SeniorProfile({Key? key}) : super(key: key);
 
@@ -16,7 +19,7 @@ class SeniorProfile extends StatelessWidget {
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance
           .collection('users')
-          .doc('Y3wkpcrAscFryYYo4UOn') //하드코딩: currentUser?.uid로 수정해야함
+          .doc(currentUserID)
           .get(), // 현재 사용자 문서를 Future로 가져오기
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

@@ -41,16 +41,14 @@ class _LoginState extends State<Login> {
         }),
       );
     } else {
-      // 인증(로그인) 구현 필요
-      // 예를 들어, 서버로 인증번호 확인 요청 등
+      // 인증(로그인) 구현
       Future<String> checkedUserState = _signInWithEmailAndPassword(context);
-
       checkedUserState.then((value) => {
             if (value == 'manager')
               {
                 Navigator.push(
                   // 정상적으로 로그인 되면 시니어, 혹은 관리자 홈으로 이동
-                  // 시니어인지 관리자인지 확인 필요
+
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ManagerInitial(),
@@ -61,7 +59,7 @@ class _LoginState extends State<Login> {
               {
                 Navigator.push(
                   // 정상적으로 로그인 되면 시니어, 혹은 관리자 홈으로 이동
-                  // 시니어인지 관리자인지 확인 필요
+
                   context,
                   MaterialPageRoute(
                     builder: (context) => const SeniorInitial(),
@@ -97,6 +95,7 @@ class _LoginState extends State<Login> {
       // Firestore에서 가져온 문서 데이터
       var userData = userInfoDoc.data() as Map<String, dynamic>;
       //manager인지 senior인지 반환하기
+
       return userData['role'];
     } on FirebaseAuthException catch (e) {
       //유저 인증 실패

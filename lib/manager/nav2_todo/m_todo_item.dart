@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
 
 class TodoItem extends StatefulWidget {
   final String text;
@@ -33,7 +37,7 @@ class _TodoItemState extends State<TodoItem> {
 
   Future<void> _updateToDoInFirestore(String newText) async {
     try {
-      final currentUserUID = 'OI75iw9Z1oTlV2EyyL8C'; //현재 user의 UID로 수정
+      final currentUserUID = currentUserID;
       final seniorUID = widget.seniorUID;
 
       await FirebaseFirestore.instance
@@ -51,8 +55,7 @@ class _TodoItemState extends State<TodoItem> {
 
   Future<void> _deleteTodoInFirestore(String todoToRemove) async {
     try {
-      final currentUserUID =
-          'B0z8CS40r7dtESumdeohkL0Rqyk2'; // 현재 사용자의 UID로 수정해야 함
+      final currentUserUID = currentUserID;
       final seniorUID = widget.seniorUID;
 
       await FirebaseFirestore.instance
@@ -116,17 +119,18 @@ class _TodoItemState extends State<TodoItem> {
                 },
                 child: Flexible(
                   child: SizedBox(
-                  width: 200,
-                  child: Text(
-                    widget.text,
-                    style: TextStyle(
-                      fontSize: 22,
-                      decoration: _isDone
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                    width: 200,
+                    child: Text(
+                      widget.text,
+                      style: TextStyle(
+                        fontSize: 22,
+                        decoration: _isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
                     ),
                   ),
-                ),),
+                ),
               ),
         IconButton(
           onPressed: () {

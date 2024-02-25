@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockknock/components/color.dart';
 import 'package:knockknock/manager/m_components/m_app_bar.dart';
@@ -9,6 +10,9 @@ import 'package:knockknock/manager/nav3_home/m_selected_knocking.dart';
 import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
 import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+String currentUserID = auth.currentUser!.uid;
+
 class ManagerHomeInitial extends StatefulWidget {
   const ManagerHomeInitial({super.key});
 
@@ -17,7 +21,7 @@ class ManagerHomeInitial extends StatefulWidget {
 }
 
 class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
-  String manageruid = "OI75iw9Z1oTlV2EyyL8C"; //[하드코딩] 임시로 관리자 uid 넣어줌
+  String manageruid = currentUserID; //[하드코딩] 임시로 관리자 uid 넣어줌
   List<Map<String, dynamic>> seniorDocs = [];
   int numberofSeniors = 0; // 현재 유저의 id를 manageruid로 가진 유저의 수
   List<Map<String, dynamic>> isEmergency = [];
@@ -40,7 +44,6 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
     isEmergency = emergencySnapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
-    print(isEmergency);
     //seniorDocs 리스트에 가져온 문서들을 하나씩 저장하기
     seniorDocs = seniorInfoSnapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
@@ -147,37 +150,37 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: isEmergency.isNotEmpty
           ? SizedBox(
-          width: 300,
-          height: 100,
-          child: FloatingActionButton(
-              backgroundColor: MyColor.myRed,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: ((context) {
-                    return AlertDialog(
-                      actionsPadding: EdgeInsets.all(0),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(60)),
-                      ),
-                      actions: [
-                        MyPopUp(
-                          date: "긴급 호출",
-                          msg:
-                          '${isEmergency.map((item) => item["seniorName"]).join(", ")}님의 현재 위치: \n${isEmergency.map((item) => item["currentAddr"]).join("\n")}',
-                        ),
-                      ],
+              width: 300,
+              height: 100,
+              child: FloatingActionButton(
+                  backgroundColor: MyColor.myRed,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: ((context) {
+                        return AlertDialog(
+                          actionsPadding: EdgeInsets.all(0),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(60)),
+                          ),
+                          actions: [
+                            MyPopUp(
+                              date: "긴급 호출",
+                              msg:
+                                  '${isEmergency.map((item) => item["seniorName"]).join(", ")}님의 현재 위치: \n${isEmergency.map((item) => item["currentAddr"]).join("\n")}',
+                            ),
+                          ],
+                        );
+                      }),
                     );
-                  }),
-                );
-              },
-              child: const Text(
-                "긴급 호출이 발생했습니다!",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              )))
+                  },
+                  child: const Text(
+                    "긴급 호출이 발생했습니다!",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  )))
           : null,
       resizeToAvoidBottomInset: true,
       backgroundColor: MyColor.myBackground,
