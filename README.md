@@ -50,10 +50,10 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 <table>
   <tr>
     <th>Function</th>
-    <the>Detail></th>
+    <th>Detail></th>
   </tr>
   <tr>
-    <td rowspan="2" align="center">Knocking</td>
+    <td rowspan="2" align="center"<strong>Knocking</strong></td>
     <td>
       test
     </td>
