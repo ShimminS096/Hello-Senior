@@ -23,7 +23,7 @@ class MySideChatBox extends StatelessWidget {
           time,
           style: const TextStyle(
             color: MyColor.myDarkGrey,
-            fontSize: 18,
+            fontSize: 15,
           ),
         ),
         const SizedBox(width: 10),

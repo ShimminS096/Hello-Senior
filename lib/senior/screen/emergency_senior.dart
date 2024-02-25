@@ -199,7 +199,7 @@ class _EmergencyPage extends State<EmergencyPage> {
                       top: 370,
                       child: Container(
                         width: 30,
-                        height: 250,
+                        height: 300,
                         decoration: ShapeDecoration(
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -212,8 +212,8 @@ class _EmergencyPage extends State<EmergencyPage> {
                               height: 20,
                             ),
                             Container(
-                              width: 230,
-                              height: 130,
+                              width: 250,
+                              height: 180,
                               decoration: BoxDecoration(
                                 color: Colors.transparent, // 투명 배경
                                 borderRadius: BorderRadius.circular(50),
@@ -227,7 +227,7 @@ class _EmergencyPage extends State<EmergencyPage> {
                                   //위치
                                   const Icon(
                                     Icons.location_on,
-                                    size: 80,
+                                    size: 70,
                                     color: MyColor.myRed,
                                   ),
                                   FutureBuilder<String>(
@@ -274,7 +274,7 @@ class _EmergencyPage extends State<EmergencyPage> {
                               textAlign: TextAlign.center,
                             ),
                             Container(
-                              width: 230,
+                              width: 250,
                               height: 40,
                               decoration: BoxDecoration(
                                 color: Colors.transparent, // 투명 배경

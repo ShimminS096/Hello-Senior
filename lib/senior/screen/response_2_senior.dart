@@ -71,7 +71,7 @@ class ResponseCompletePage extends StatelessWidget {
                         height: 140,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/basic_profile.png'),
+                            image: AssetImage('assets/images/basic_profile.png'),
                           ),
                         ),
                       ),

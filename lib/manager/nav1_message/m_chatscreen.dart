@@ -191,7 +191,8 @@ class _ManagerChatscreenState extends State<ManagerChatscreen> {
         height: 100,
         child: Center(
           child: Text(
-            isWarning ? "경고! 대답없는 문 두드리기가 있습니다" : "정상 상태입니다.",
+            textAlign: TextAlign.center,
+            isWarning ? "경고! \n 대답없는 문 두드리기가 있습니다" : "정상 상태입니다.",
             style: TextStyle(
               fontSize: isWarning ? 28 : 25,
               color: isWarning ? MyColor.myRed : MyColor.myBlack,

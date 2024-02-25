@@ -16,7 +16,7 @@ class SeniorProfile extends StatelessWidget {
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance
           .collection('users')
-          .doc('ZGL42b7A51pxoNxoJKPe') //하드코딩: currentUser?.uid로 수정해야함
+          .doc('Y3wkpcrAscFryYYo4UOn') //하드코딩: currentUser?.uid로 수정해야함
           .get(), // 현재 사용자 문서를 Future로 가져오기
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

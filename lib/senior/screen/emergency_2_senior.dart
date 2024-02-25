@@ -126,7 +126,7 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                         top: 370,
                         child: Container(
                           width: 30,
-                          height: 250,
+                          height: 300,
                           decoration: ShapeDecoration(
                             color: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -139,8 +139,8 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                 height: 20,
                               ),
                               Container(
-                                width: 230,
-                                height: 130,
+                                width: 250,
+                                height: 180,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent, // 투명 배경
                                   borderRadius: BorderRadius.circular(50),
@@ -153,7 +153,7 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                   children: [
                                     const Icon(
                                       Icons.location_on,
-                                      size: 80,
+                                      size: 70,
                                       color: MyColor.myBlue,
                                     ),
                                     Padding(
@@ -179,7 +179,7 @@ class _EmergencyCompletePage extends State<EmergencyCompletePage> {
                                 textAlign: TextAlign.center,
                               ),
                               Container(
-                                width: 230,
+                                width: 250,
                                 height: 40,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent, // 투명 배경

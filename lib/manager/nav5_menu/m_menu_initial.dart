@@ -61,6 +61,7 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
     }
   }
 
+
   void updateManagerProfile() async {
     // 사용자가 수정 완료 버튼을 눌렀을 때
     final newData = {
@@ -114,7 +115,8 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
         title: '메뉴',
         size: 95,
       ),
-      body: Center(
+      body:  SingleChildScrollView(
+    child: Center(
         child: Column(
           children: [
             SizedBox(
@@ -135,7 +137,7 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                   const SizedBox(height: 10),
                   Text(
                     name,
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -160,11 +162,11 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
                           topRight: Radius.circular(20)),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 200,
                             child: Text(
                               "전화번호",
@@ -349,7 +351,7 @@ class _ManagerMenuInitialState extends State<ManagerMenuInitial> {
             ),
           ],
         ),
-      ),
+      ),),
     );
   }
 }

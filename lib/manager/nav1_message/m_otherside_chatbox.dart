@@ -46,7 +46,7 @@ class OtherSideChatBox extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 250,
+                  width: 220,
                   height: 100,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class OtherSideChatBox extends StatelessWidget {
               time,
               style: const TextStyle(
                 color: MyColor.myDarkGrey,
-                fontSize: 18,
+                fontSize: 15,
               ),
             ),
           ],

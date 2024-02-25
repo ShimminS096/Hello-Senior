@@ -7,6 +7,7 @@ import 'package:knockknock/components/mypopup.dart';
 import 'package:knockknock/manager/m_components/m_senior_profile_box.dart';
 import 'package:knockknock/manager/nav3_home/m_selected_knocking.dart';
 import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
+import 'package:knockknock/manager/nav3_home/m_senior_profile.dart';
 
 class ManagerHomeInitial extends StatefulWidget {
   const ManagerHomeInitial({super.key});
@@ -19,17 +20,27 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
   String manageruid = "OI75iw9Z1oTlV2EyyL8C"; //[하드코딩] 임시로 관리자 uid 넣어줌
   List<Map<String, dynamic>> seniorDocs = [];
   int numberofSeniors = 0; // 현재 유저의 id를 manageruid로 가진 유저의 수
+  List<Map<String, dynamic>> isEmergency = [];
 
   /*
-  manageruid가 현재 유저(관리자)와 같은 돌봄 관리자 문서를 전부 가져오기
+  manageruid가 현재 유저(관리자)와 같은 돌봄 관리자 문서를 전부 가져오기 + emergencyCall 컬렉션 가져오기
   */
-  void fetchSeniorDocs() async {
+  Future<void> fetchSeniorDocs() async {
     QuerySnapshot seniorInfoSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('managerUID', isEqualTo: manageruid)
         .where('role', isEqualTo: 'senior')
         .get();
 
+    // emergencyCall 컬렉션
+    QuerySnapshot emergencySnapshot = await FirebaseFirestore.instance
+        .collection('emergencyCall')
+        .where('isEmergency', isEqualTo: true)
+        .get();
+    isEmergency = emergencySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+    print(isEmergency);
     //seniorDocs 리스트에 가져온 문서들을 하나씩 저장하기
     seniorDocs = seniorInfoSnapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
@@ -39,6 +50,7 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
     setState(() {
       seniorDocs = seniorDocs;
       numberofSeniors = seniorDocs.length;
+      isEmergency = isEmergency;
     });
   }
 
@@ -89,7 +101,7 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
           .collection('message')
           .doc(manageruid)
           .collection('senior')
-          .doc(info['seniorUID'])
+          .doc(info['uid'])
           .collection('now')
           .add({
         'context': "잘 지내시나요?",
@@ -132,6 +144,41 @@ class _ManagerHomeInitialState extends State<ManagerHomeInitial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: isEmergency.isNotEmpty
+          ? SizedBox(
+          width: 300,
+          height: 100,
+          child: FloatingActionButton(
+              backgroundColor: MyColor.myRed,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: ((context) {
+                    return AlertDialog(
+                      actionsPadding: EdgeInsets.all(0),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                      ),
+                      actions: [
+                        MyPopUp(
+                          date: "긴급 호출",
+                          msg:
+                          '${isEmergency.map((item) => item["seniorName"]).join(", ")}님의 현재 위치: \n${isEmergency.map((item) => item["currentAddr"]).join("\n")}',
+                        ),
+                      ],
+                    );
+                  }),
+                );
+              },
+              child: const Text(
+                "긴급 호출이 발생했습니다!",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              )))
+          : null,
       resizeToAvoidBottomInset: true,
       backgroundColor: MyColor.myBackground,
       appBar: const ManagerAppBar(

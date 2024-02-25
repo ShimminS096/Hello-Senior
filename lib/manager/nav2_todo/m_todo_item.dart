@@ -114,8 +114,9 @@ class _TodoItemState extends State<TodoItem> {
                     _isEditing = true;
                   });
                 },
-                child: SizedBox(
-                  width: 290,
+                child: Flexible(
+                  child: SizedBox(
+                  width: 200,
                   child: Text(
                     widget.text,
                     style: TextStyle(
@@ -125,7 +126,7 @@ class _TodoItemState extends State<TodoItem> {
                           : TextDecoration.none,
                     ),
                   ),
-                ),
+                ),),
               ),
         IconButton(
           onPressed: () {
