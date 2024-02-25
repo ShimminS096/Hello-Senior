@@ -40,11 +40,11 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   </li>
   <li>
     <strong>Emergency help request function for the elderly</strong><br>
-	  If the elderly are in a dangerous or urgent need of help, an ‘emergency call’ event can be used. 
+	  If the elderly are in dangerous or urgent need of help, an ‘emergency call’ event can be used. 
   </li> 
   <li>
     <strong>Functions that make the work of a caregiver convenient: To-do list, saving profiles of senior citizens in charge, location tracking of the elderly</strong><br> 
-	  'KnockKnock' offers a number of functions to make it easier for caregivers to work.
+	  'KnockKnock' offers several functions to make it easier for caregivers to work.
   </li> 
 </ol>
 
@@ -56,7 +56,9 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   <tr>
     <td rowspan="2" align="center">Knocking</td>
     <td>
-      test
+      <video controls>
+	      <source src="knock.mp4" type="video/mp4">
+      </video>
     </td>
   </tr>
   <tr>
