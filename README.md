@@ -50,7 +50,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 
 <table>
   <tr>
-    <td rowspan="2">Function</td>
+    <td colspan="2">Function</td>
   </tr>
   <tr>
     <td>Knocking</td>
