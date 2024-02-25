@@ -56,7 +56,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
   Future<void> _signUpWithEmailAndPassword(BuildContext context) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: _phoneController.text + '@knockknock.com',
+            email: _phoneController.text + '@knockknock.mail',
             password: _phoneController.text);
 
     //firestore의 users 컬렉션에 신규 관리자 문서 등록하기
