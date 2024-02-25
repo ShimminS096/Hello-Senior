@@ -142,7 +142,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   <img src="KNOCKKNOCK!_FLOWCHART.jpg" alt="KNOCKKNOCK! FLOWCHART" width="1800px">
 </p>
 <br>
-<br>
 
 
 ## 👟 How To Run Code
@@ -193,6 +192,8 @@ If an error occurs, please enter the following command at the terminal.<br>
 
 
 ## 👥 Team
-
+| Gil Jeongsu | Shim Minseo | Yang Yehyeon | CHo Hyunji |
+|-------------|-------------|--------------|------------|
+| Design<br> Frontend | Design<br> Frontend | Design<br> Backend | Design<br> Backend|
 <br>
 <br>
