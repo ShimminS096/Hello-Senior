@@ -48,13 +48,6 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
 | Knocking | | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.|
 | Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
 
-| Function | Detail |
-|----------|--------|
-| Knocking | test |
-|          | detail |
-| Knocking | | The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message.|
-| Emergency | | In an emergency, the elderly can send their real-time location information to the manager. |
-
 <table>
   <tr>
     <th>Function</th>
@@ -65,7 +58,14 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <td>test</td>
   </tr>
   <tr>
-    <td>detail</td>
+    <td> The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message. </td>
+  </tr>
+  <tr>
+    <td rowspan="2">Emergency</td>
+    <td>test</td>
+  </tr>
+  <tr>
+    <td> In an emergency, the elderly can send their real-time location information to the manager. </td>
   </tr>
 </table>
 
