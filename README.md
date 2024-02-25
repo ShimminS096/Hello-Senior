@@ -49,8 +49,12 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
     <th>Detail</th>
   </tr>
   <tr>
-    <td rowspan="2">Knocking</td>
-    <td>test</td>
+    <td rowspan="2" style="text-align:center;">
+      Knocking
+    </td>
+    <td>
+      test
+    </td>
   </tr>
   <tr>
     <td> The manager sends the elderly a text saying 'How are you?'. Then, the senior can reply to the most recently received text message. </td>
