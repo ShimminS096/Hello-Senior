@@ -55,7 +55,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   <tr>
     <td rowspan="2" align="center"><strong>Knocking</strong></td>
     <td>
-      ![GIF}(knocking.gif)
+      ![GIF](knocking.gif)
     </td>
   </tr>
   <tr>
