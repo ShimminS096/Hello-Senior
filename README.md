@@ -192,10 +192,8 @@ If an error occurs, please enter the following command at the terminal.<br>
 
 
 ## 👥 Team
-<p align="center">
 | Gil Jeongsu | Shim Minseo | Yang Yehyeon | Cho Hyunji |
 |-------------|-------------|--------------|------------|
 | <p align="center">Design<br> Frontend</p> | <p align="center">Design<br> Frontend</p> | <p align="center">Design<br> Backend</p> | <p align="center">Design<br> Backend</p>|
-</p>
 <br>
 <br>
