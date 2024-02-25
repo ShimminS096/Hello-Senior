@@ -99,7 +99,7 @@ Our team focused on the aging problem, which is a social problem in Korea. Along
   <tr>
     <td rowspan="2" align="center"> <strong>To-do List</strong> </td>
     <td align="center">
-	    <img src=todo_list.gif" alt="GIF" width="300">
+	    <img src="todo_list.gif" alt="GIF" width="300">
     </td>
   </tr>
   <tr>
