@@ -166,6 +166,11 @@ If an error occurs, please enter the following command at the terminal.<br>
 	Execute the code.<br>
 	   The best recommendation to run is to use the emulator. As we designed the UI to match with iPhone 14 Pro, we recommend running the emulator with the iPhone 14 Pro.<br>
 	   If there is a problem with running the emulator, you can check it by running code in Chrome.
+	   For a smooth demonstration, we put dummy data in the database(Firestore)**.** You can login by the phonenumbers below. (Please enter '-' as well.)
+
+**Caregiver: 010-9275-3171**
+
+**Senior: 010-1111-1111**
    </li>
 </ol>
 <br>
